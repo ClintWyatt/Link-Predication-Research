@@ -6,8 +6,8 @@
 
 vector<float> AA(vector<Edge> *missing, string alg, A_Network *X)
 {
-    ofstream output(alg + "AA.txt");
-    ofstream predicted(alg + "AA.txt"+"_predicated");
+    ofstream output("results/"+ alg + "AA.txt");
+    ofstream predicted("results/predicated/" + alg + "AA.txt");
     float score;//represents the 
     vector<float> AAscores;//represents AA scores
     int n1, n2, k, l, cn;//k and l represent the indexes for the neighbors for node1 and node2. cn represents the common neighbors

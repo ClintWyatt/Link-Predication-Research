@@ -23,11 +23,11 @@
 #include "calculate_and_print.hpp"
 #include "sampling.hpp"
 */
-#include "samplingMethods/xsn.hpp"
 #include "printFunctions.hpp"
 #include "missingEdges.hpp"
-#include "commonNeighbors.hpp"
 #include "sorting.hpp"
+#include "samplingMethods/xsn.hpp"
+#include "link-predMethods/commonNeighbors.hpp"
 #include "link-predMethods/AA.hpp"
 #include "link-predMethods/katz.hpp"
 /*** All Headers Required From ESSENS **/
@@ -118,7 +118,8 @@ int main(int argc, char *argv[])
     writeNetwork(&X, &S, "networks/XSN");//writing networks X and S to output files
     missingEdges(&X, &S, &missing);//getting the edges that are in the origional network, but not the sample network
     
-    ofstream writeScore("results/xsnCn.txt");
+    ofstream cn("results/xsnCn.txt");//writing the results of the common neighbors to a text file
+    ofstream cnP("results/predicated/xsnCn.txt");//writing the predicated score of common neighbors
     ofstream missingE("results/missingEdges.txt");//writting the missing edges to a text file
     for(int i =0; i < missing.size(); i++)
     {
@@ -134,10 +135,15 @@ int main(int argc, char *argv[])
 
     for(int i = scores.size()-1; i > -1; i--)
     {
-        writeScore << scores[i] << endl;
+        if(scores[i] > 78)//writing the top 5 bins to the predicated score. This is dependent on the type of graph (aves-wildbird for this case)
+        {
+            cnP<<scores[i] <<endl;
+        }
+        cn << scores[i] << endl;
     }
-    writeScore.close();
-    AA(&missing, "results/xsn", &X);
+    cn.close();
+    cnP.close();
+    AA(&missing, "xsn", &X);
     cout << "running katz"<<endl;
     katz(&X, &missing, "XSN");
     return 0;   

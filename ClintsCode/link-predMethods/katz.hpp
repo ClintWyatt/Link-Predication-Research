@@ -51,6 +51,7 @@ int pathLength3(vector<int> *node1Neighbors, vector<int> *node2Neighbors, Edge m
     return count;
 }
 
+//not finsihed yet, but the logic will be similar to a path of 3
 int pathLength4(vector<int> *node1Neighbors, vector<int> *node2Neighbors, Edge missing, A_Network *X)
 {
     int score =0;
@@ -66,6 +67,7 @@ void katz(A_Network *X, vector<Edge> *missing, string alg)
     vector<float>scores;
     int n1, n2, commonCount;//n1 and n2 are indexes in the lists of node1 and node2 of the missing edge. Commoncount represents the number of paths for lengths of 1, 2, and 3.
     ofstream katzResults("results/"+alg+"katz.txt");
+    ofstream katzPredicated("results/predicated/"+alg+"katz.txt");
     for(int i =0; i < missing->size(); i++)
     {
         //cout <<"missing edge: " << missing->at(i).node1 << " " << missing->at(i).node2 << endl;
@@ -116,18 +118,24 @@ void katz(A_Network *X, vector<Edge> *missing, string alg)
             {
                 score += pow(0.05, j+1) * pathLength3(&node1Neighbors, &node2Neighbors, missing->at(i), X);
             }
+            /* use the else statement below if a path of 4 is required
             else
             {
                 score += pow(0.05, j+1) * pathLength4(&node1Neighbors, &node2Neighbors, missing->at(i), X);
             }
+            */
         }
         //cout << score << endl;
         scores.push_back(score);
     }
-    sort_scores(&scores);
+    sort_scores(&scores);//sorting the scores using insertion sort
 
     for(int i =scores.size()-1; i > -1; i--)
     {
+        if(scores[i] >= 0.5)//threshold based off the aves-wildbird file
+        {
+            katzPredicated << scores[i] << endl;
+        }
         katzResults << scores[i]<<endl;
     }
     katzResults.close();
