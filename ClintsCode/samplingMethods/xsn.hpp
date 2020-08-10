@@ -1,0 +1,187 @@
+#ifndef XSN_HPP
+#define XSN_HPP
+
+
+using namespace std;
+
+void snowball(A_Network *X, A_Network *S, int size)
+{
+    /*data structures */
+
+    /*bit vectors*/
+    vector<int> green;//represents a set of nodes from the X network that are the sample nodes. Is represented as "green" nodes in the paper
+    vector<int> red;//neighbors of the sample nodes (green nodes). Represented as "red" nodes in the paper. 
+    vector<int> marked; //used to prevent duplicates in the red array
+
+    /*int_int vector*/
+    vector<int_int> white;//nodes that are adjacent to the red nodes, but not the green nodes. They are unknown nodes and are
+    //"white" nodes in the paper. 
+    
+    
+    /*variables*/
+    int max;//used for the maximum unknown nodes a red nodes has
+    int maxIndex =0;//used when trying to determine which red node is next to the most white nodes
+    int maxNeighbors;//represents the number of white nodes that are next to a red node, not a green node.
+    int_int visitedNode;//represents a red node with the number of white nodes next to it.
+    int index =0; //used to help get the index of the red array 
+
+    /*snowball algorithm satart */
+    S->clear();//erasing all contents of the S network
+    red.resize(X->size(), 0);//creating a array that represents the neighbors green nodes,
+    //initializing them all to zero. 
+    marked.resize(X->size(), 0);
+    srand(time(NULL));//starting random number generator
+    int node = rand() % X->size(); //picking a random node to start from in the X network
+    green.push_back(node); //adding the first random node to the sample nodes
+    marked[node] = 1;//setting the index of the new added node to the sample nodes to 1
+
+    //setting all the neighbors of the first green node to red nodes.
+    for(int i =0; i < X->at(node).ListW.size(); i++)
+    {
+        red[X->at(node).ListW[i].first] = 1;//making the nodes that are adjacent to the green node red
+    }
+
+    while(green.size() <= size)
+    {
+        //from the sample neighbors, find a neighbor that has the most nodes that are not in the red array
+        for(int i =0; i < red.size(); i++)
+        {
+            maxNeighbors =0;//intiializing the maxNeighbors variable to 0. This represents white nodes adjacent to the red nodes
+            if(red[i] == 1 && marked[i] == 0)//if the current node is a neighbor of the green nodes and is not a green node itself
+            {
+                
+                for(int j = 0; j < X->at(i).ListW.size(); j++)//Checking how many unkown nodes there are to a neighbor of the sample nodes
+                {
+                    index = X->at(i).ListW[j].first;
+                    if(red[index] == 0)//if the neighbor has not been visited yet (white neighbor)
+                    {
+                        maxNeighbors++;
+                    }
+                }
+                visitedNode.first = i;//setting neighbor of the sample to first 
+                visitedNode.second = maxNeighbors;//setting the number of unknown nodes that are not adjacent to the sample neighbors set to second
+                white.push_back(visitedNode);//adding a white node to the white vector
+            }
+        }
+       
+        max = -1; //setting the max 
+        maxIndex = -1;//represents the node with the maximum unknown neighbors
+        //finding out which node from the white set that has the most neighbors not in the sample. 
+        for(int i =0; i < white.size(); i++)
+        {
+            if(white[i].second > max)
+            {
+                max = white[i].second;
+                maxIndex = white[i].first;//setting the max index to the node with the most unknown neighbors
+            }
+        }
+        if(maxIndex == -1){break;}//end the snowball algorithm, all needed nodes have been found
+
+        //add sample's neighbor with the most unknown nodes to the sample
+        green.push_back(maxIndex);//adding the node with the most white neighbors to the sample nodes
+        marked[maxIndex] = 1; //marking the green node that was added
+        red[maxIndex] =0; //removing the new green node from the array of red nodes
+
+        //set all of the white nodes that are adjacent to the new green node to red
+        for(int i =0; i < X->at(maxIndex).ListW.size(); i++)
+        {
+            if(marked[X->at(maxIndex).ListW[i].first] == 0)//if the node is not green
+            {
+                red[X->at(maxIndex).ListW[i].first] = 1;
+            }
+        }
+        white.clear();//resetting the white vector
+    }
+
+    //find the remaining white nodes
+    for(int i =0; i < red.size(); i++)
+    {
+        if(red[i] == 1)//if the current node is red
+        {
+            for(int j =0; j < X->at(i).ListW.size(); j++)
+            {
+                if(red[X->at(i).ListW[j].first] == 0 && marked[X->at(i).ListW[j].first] == 0)//if the node is a white node (unknown node)
+                {
+                    red[X->at(i).ListW[j].first] = 2; //marking the white node to 2 in the red array to denote the array postion as white
+                }
+            }
+        }
+    }
+    /*
+    cout<<"green nodes: "<< endl;
+    for(int i=0; i < green.size(); i++)
+    {
+        cout << green[i]<< endl;
+    }
+    cout <<"Red nodes: " << endl;
+    for(int i =0; i < red.size(); i++)
+    {
+        if(red[i] == 1){cout<<i<<endl;}
+    }
+    cout <<"white nodes: "<< endl;
+    for(int i =0; i < red.size(); i++)
+    {
+        if(red[i] ==2){cout <<i<<endl;}
+    }
+    */
+    //adding the red and white nodes to the green nodes list to make putting the sample graph togeather more simple. 
+    
+    for(int i =0; i < red.size(); i++)
+    {
+        if((red[i] == 1 /*|| red[i] == 2) && (marked[i] == 0)*/))//if the nodes are red/white and not green. 
+        green.push_back(i);
+    }
+    
+    sort(&green);
+    /*
+    cout << "all nodes to be used for the sample graph " << endl;
+    for(int i =0; i < green.size(); i++)
+    {
+        cout << green[i] << endl;
+    }
+    */
+    /*
+    int current = red.size();
+    //now getting the unknown nodes that are 
+    for(int i=0; i < current; i++)
+    {
+        if(red[i] == 1 && marked[i] == 0)//if the node is a neighbor of the green and not in the sample itself
+        {
+            for(int j =0; j < X->at(i).ListW.size(); j++)//going through the sampleNeighbor's nodes to see if any of them are unknown
+            {
+                if(red[X->at(i).ListW[j].first] == 0 && marked[X->at(i).ListW[j].first] == 0)
+                {
+                    green.push_back(X->at(i).ListW[j].first);//adding the unknown neighbor to green
+                }
+            }
+        }
+    }
+    */
+    //adding the sample nodes to the S network
+    S->resize(X->size());//making the sample graph have as many rows as the origional graph
+    for(int i =0; i < S->size(); i++)
+    {
+        S->at(i).Row = i;
+    }
+
+    //for adding nodes to the sample graph, add all nodes that are connected to red and green nodes. Create a induced subgraph of the sample nodes
+    int_double neighbor;//used to add neighbors to the sample network
+    for(int i =0; i < green.size(); i++)
+    {
+        for(int j=0; j < X->size(); j++)
+        {
+            for(int k =0; k < X->at(j).ListW.size(); k++)
+            {
+                if(green[i] != X->at(j).Row && green[i] == X->at(j).ListW[k].first)//preventing self loops
+                {
+                    neighbor.first = X->at(j).ListW[k].first;
+                    neighbor.second = X->at(j).ListW[k].second;
+                    S->at(j).ListW.push_back(neighbor);//adding the neighbor to the row on the sample network
+                }
+            }
+        }
+    }
+
+}
+
+#endif
