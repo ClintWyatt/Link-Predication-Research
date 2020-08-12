@@ -26,7 +26,7 @@ vector<float> AA(vector<Edge> *missing, string alg, A_Network *X)
                 if(X->at(X->at(n1).ListW[k].first).ListW.size() >1)//if the common neighbors list is connected to more than 1 node (log(1) =0)
                 {
                     //cout << "degree of node being added for: " <<X->at(n1).ListW[k].first <<" is " << X->at(X->at(n1).ListW[k].first).ListW.size();
-                    score += 1/log10(X->at(X->at(n1).ListW[k].first).ListW.size());//adding to the score
+                    score += 1/log(X->at(X->at(n1).ListW[k].first).ListW.size());//adding to the score
                     //cout <<" With value " << 1/log(X->at(X->at(n1).ListW[k].first).ListW.size()) << endl;
                 }
                 k++;//go to the next index for node1's list
@@ -34,7 +34,7 @@ vector<float> AA(vector<Edge> *missing, string alg, A_Network *X)
                 cn++;//increment the number of common neighbors
             }
         }
-        if(cn > 0){AAscores.push_back(score);} //cout <<"score for edges " << n1 << " and " <<n2 <<": " <<score <<endl;}//if there are common neighbors, add the score of the two neighbors
+        AAscores.push_back(score);
     }
     sort_scores(&AAscores);//sort the scores for easier output for excell
     for(int i = AAscores.size() -1; i > -1; i--)

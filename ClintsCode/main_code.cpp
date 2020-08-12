@@ -114,6 +114,7 @@ int main(int argc, char *argv[])
 
     A_Network S;           //sample network. Network_defs.hpp
     int k = X.size() / 8; //sample network size
+    cout <<"running snowball" <<endl;
     snowball(&X, &S, k);//snowball algorithm
     writeNetwork(&X, &S, "networks/XSN");//writing networks X and S to output files
     missingEdges(&X, &S, &missing);//getting the edges that are in the origional network, but not the sample network
@@ -126,7 +127,7 @@ int main(int argc, char *argv[])
         missingE << missing[i].node1 << " " << missing[i].node2 << endl;
     }
     missingE.close();
-
+    cout << "running common neighbors" << endl;
     for(int i = 0; i < missing.size(); i++)
     {
         scores.push_back(commonNeighbors(missing[i].node1, missing[i].node2, &X));
@@ -143,6 +144,7 @@ int main(int argc, char *argv[])
     }
     cn.close();
     cnP.close();
+    cout <<"running AA" <<endl;
     AA(&missing, "xsn", &X);
     cout << "running katz"<<endl;
     katz(&X, &missing, "XSN");
