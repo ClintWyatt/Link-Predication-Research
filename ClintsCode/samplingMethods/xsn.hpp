@@ -43,14 +43,14 @@ void snowball(A_Network *X, A_Network *S, int size)
 
     while(green.size() <= size)
     {
-        //from the sample neighbors, find a neighbor that has the most nodes that are not in the red array
+        //from the sample neighbors (red neighbors), find a red neighbor that has the most nodes that are not in the red array
         for(int i =0; i < red.size(); i++)
         {
             maxNeighbors =0;//intiializing the maxNeighbors variable to 0. This represents white nodes adjacent to the red nodes
             if(red[i] == 1 && marked[i] == 0)//if the current node is a neighbor of the green nodes and is not a green node itself
             {
                 
-                for(int j = 0; j < X->at(i).ListW.size(); j++)//Checking how many unkown nodes there are to a neighbor of the sample nodes
+                for(int j = 0; j < X->at(i).ListW.size(); j++)//Checking how many unkown nodes there are for the current red node
                 {
                     index = X->at(i).ListW[j].first;
                     if(red[index] == 0)//if the neighbor has not been visited yet (white neighbor)
@@ -75,7 +75,8 @@ void snowball(A_Network *X, A_Network *S, int size)
                 maxIndex = white[i].first;//setting the max index to the node with the most unknown neighbors
             }
         }
-        if(maxIndex == -1){break;}//end the snowball algorithm, all needed nodes have been found
+
+        if(maxIndex == 0){break;}//if there are no white nodes left in the graph
 
         //add sample's neighbor with the most unknown nodes to the sample
         green.push_back(maxIndex);//adding the node with the most white neighbors to the sample nodes
@@ -124,7 +125,7 @@ void snowball(A_Network *X, A_Network *S, int size)
         if(red[i] ==2){cout <<i<<endl;}
     }
     */
-    //adding the red and white nodes to the green nodes list to make putting the sample graph togeather more simple. 
+    //adding the red nodes to the green nodes list to make putting the sample graph togeather more simple. 
     
     for(int i =0; i < red.size(); i++)
     {

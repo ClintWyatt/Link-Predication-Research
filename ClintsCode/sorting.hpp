@@ -24,4 +24,13 @@ void sort_scores(vector<myType> *scores)
     }
 }
 
+template <class myType>
+void quickSort(Vector<myType> *scores){
+    
+
+
+
+
+}
+
 #endif
