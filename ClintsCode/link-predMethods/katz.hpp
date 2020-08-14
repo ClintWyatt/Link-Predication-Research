@@ -128,7 +128,7 @@ void katz(A_Network *X, vector<Edge> *missing, string alg)
         //cout << score << endl;
         scores.push_back(score);
     }
-    sort_scores(&scores);//sorting the scores using insertion sort
+    insertionSort(&scores);//sorting the scores using insertion sort
 
     for(int i =scores.size()-1; i > -1; i--)
     {

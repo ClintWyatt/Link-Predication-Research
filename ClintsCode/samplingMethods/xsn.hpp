@@ -17,7 +17,6 @@ void snowball(A_Network *X, A_Network *S, int size)
     vector<int_int> white;//nodes that are adjacent to the red nodes, but not the green nodes. They are unknown nodes and are
     //"white" nodes in the paper. 
     
-    
     /*variables*/
     int max;//used for the maximum unknown nodes a red nodes has
     int maxIndex =0;//used when trying to determine which red node is next to the most white nodes
@@ -34,7 +33,6 @@ void snowball(A_Network *X, A_Network *S, int size)
     int node = rand() % X->size(); //picking a random node to start from in the X network
     green.push_back(node); //adding the first random node to the sample nodes
     marked[node] = 1;//setting the index of the new added node to the sample nodes to 1
-
     //setting all the neighbors of the first green node to red nodes.
     for(int i =0; i < X->at(node).ListW.size(); i++)
     {
@@ -47,17 +45,19 @@ void snowball(A_Network *X, A_Network *S, int size)
         for(int i =0; i < red.size(); i++)
         {
             maxNeighbors =0;//intiializing the maxNeighbors variable to 0. This represents white nodes adjacent to the red nodes
-            if(red[i] == 1 && marked[i] == 0)//if the current node is a neighbor of the green nodes and is not a green node itself
+            if(red[i] == 1 && marked[i] == 0)//if the current node is a red node and not a green node itself
             {
                 
                 for(int j = 0; j < X->at(i).ListW.size(); j++)//Checking how many unkown nodes there are for the current red node
                 {
                     index = X->at(i).ListW[j].first;
-                    if(red[index] == 0)//if the neighbor has not been visited yet (white neighbor)
+                    if(red[index] == 0 && marked[index] == 0)//if the neighbor has not been visited yet (white neighbor) and is not a green node
                     {
+                        //cout << marked[index] << endl;
                         maxNeighbors++;
                     }
                 }
+
                 visitedNode.first = i;//setting neighbor of the sample to first 
                 visitedNode.second = maxNeighbors;//setting the number of unknown nodes that are not adjacent to the sample neighbors set to second
                 white.push_back(visitedNode);//adding a white node to the white vector
@@ -76,7 +76,7 @@ void snowball(A_Network *X, A_Network *S, int size)
             }
         }
 
-        if(maxIndex == 0){break;}//if there are no white nodes left in the graph
+        if(maxIndex == 0){break;}//if the remaining white nodes cannot be found
 
         //add sample's neighbor with the most unknown nodes to the sample
         green.push_back(maxIndex);//adding the node with the most white neighbors to the sample nodes
@@ -94,20 +94,6 @@ void snowball(A_Network *X, A_Network *S, int size)
         white.clear();//resetting the white vector
     }
 
-    //find the remaining white nodes
-    for(int i =0; i < red.size(); i++)
-    {
-        if(red[i] == 1)//if the current node is red
-        {
-            for(int j =0; j < X->at(i).ListW.size(); j++)
-            {
-                if(red[X->at(i).ListW[j].first] == 0 && marked[X->at(i).ListW[j].first] == 0)//if the node is a white node (unknown node)
-                {
-                    red[X->at(i).ListW[j].first] = 2; //marking the white node to 2 in the red array to denote the array postion as white
-                }
-            }
-        }
-    }
     /*
     cout<<"green nodes: "<< endl;
     for(int i=0; i < green.size(); i++)
@@ -118,11 +104,6 @@ void snowball(A_Network *X, A_Network *S, int size)
     for(int i =0; i < red.size(); i++)
     {
         if(red[i] == 1){cout<<i<<endl;}
-    }
-    cout <<"white nodes: "<< endl;
-    for(int i =0; i < red.size(); i++)
-    {
-        if(red[i] ==2){cout <<i<<endl;}
     }
     */
     //adding the red nodes to the green nodes list to make putting the sample graph togeather more simple. 

@@ -1,6 +1,7 @@
 #ifndef MISSINGEDGES_HPP
 #define MISSINGEDGES_HPP
 
+
 void missingEdges(A_Network *X, A_Network *S, vector<Edge> *nonexist)
 {
 
@@ -65,6 +66,33 @@ void missingEdges(A_Network *X, A_Network *S, vector<Edge> *nonexist)
           nonexist->push_back(mye);//pushing back the edge to the vector of edges
         }
       }
+    }
+  }
+}
+
+void missingSample( A_Network *S, vector<Edge> *missing)
+{
+  Edge mye;//represents the edge to be added to the missing list
+  bool found = false;
+  for(int i=0; i < S->size(); i++)
+  {
+    for(int j =i+1; j <S->size(); j++)
+    {
+      for(int k =0; k < S->at(j).ListW.size(); k++)
+      {
+        if(S->at(j).ListW[k].first == i)
+        {
+          found = true;
+          break;
+        }
+      }
+      if(found == false)//if the edge between i and j was not found, add it to the missing edges array
+      {
+        mye.node1 = i;
+        mye.node2 = j;
+        missing->push_back(mye);
+      }
+      found = false;
     }
   }
 }

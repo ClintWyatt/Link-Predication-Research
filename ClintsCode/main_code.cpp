@@ -24,7 +24,7 @@
 #include "sampling.hpp"
 */
 #include "printFunctions.hpp"
-#include "missingEdges.hpp"
+#include "samplingMethods/missingEdges.hpp"
 #include "sorting.hpp"
 #include "samplingMethods/xsn.hpp"
 #include "link-predMethods/commonNeighbors.hpp"
@@ -109,44 +109,32 @@ int main(int argc, char *argv[])
     int p;                  //percentage of edges removed
     int k_dist;             //distance between neighbors to be considered for missing edges
     vector<int> scores;     //represents the scores from the link prediction algorithms such as common neighbors, AA, Kantz, etc.
-    vector<int_int> D;      //keeps track of degree of each vertex
+    vector<Edge> sampleMissing; //represents the missing edges for the sample network against itself. Will be significantly larger than the missing array below
     vector<Edge> missing; //array representing missing edges that are in the origional network, but not the sample network
-
     A_Network S;           //sample network. Network_defs.hpp
     int k = X.size() / 8; //sample network size
     cout <<"running snowball" <<endl;
     snowball(&X, &S, k);//snowball algorithm
     writeNetwork(&X, &S, "networks/XSN");//writing networks X and S to output files
     missingEdges(&X, &S, &missing);//getting the edges that are in the origional network, but not the sample network
-    
-    ofstream cn("results/xsnCn.txt");//writing the results of the common neighbors to a text file
-    ofstream cnP("results/predicated/xsnCn.txt");//writing the predicated score of common neighbors
-    ofstream missingE("results/missingEdges.txt");//writting the missing edges to a text file
+    missingSample(&S, &sampleMissing);
+    ofstream missingE("results/missingEdges.txt");//writting the missing edges that are in the origional graph, but missing in the sample graph to a text file
+    ofstream missingS("results/sampleMissing.txt");//writing the missing nodes in the sample graph to a text file
     for(int i =0; i < missing.size(); i++)
     {
         missingE << missing[i].node1 << " " << missing[i].node2 << endl;
     }
+    for(int i =0; i < sampleMissing.size(); i++)
+    {
+        missingS << sampleMissing[i].node1 << " "<< sampleMissing[i].node2 <<endl;
+    }
     missingE.close();
     cout << "running common neighbors" << endl;
-    for(int i = 0; i < missing.size(); i++)
-    {
-        scores.push_back(commonNeighbors(missing[i].node1, missing[i].node2, &X));
-    }
-    sort_scores(&scores);
+    commonNeighbors(&missing, &S, "xsn-sample");
 
-    for(int i = scores.size()-1; i > -1; i--)
-    {
-        if(scores[i] > 78)//writing the top 5 bins to the predicated score. This is dependent on the type of graph (aves-wildbird for this case)
-        {
-            cnP<<scores[i] <<endl;
-        }
-        cn << scores[i] << endl;
-    }
-    cn.close();
-    cnP.close();
     cout <<"running AA" <<endl;
-    AA(&missing, "xsn", &X);
+    AA(&missing, "xsn", &S);
     cout << "running katz"<<endl;
-    katz(&X, &missing, "XSN");
+    katz(&S, &missing, "XSN");
     return 0;   
 }

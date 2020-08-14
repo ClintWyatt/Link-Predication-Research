@@ -36,7 +36,7 @@ vector<float> AA(vector<Edge> *missing, string alg, A_Network *X)
         }
         AAscores.push_back(score);
     }
-    sort_scores(&AAscores);//sort the scores for easier output for excell
+    insertionSort(&AAscores);//sort the scores for easier output for excell
     for(int i = AAscores.size() -1; i > -1; i--)
     {
         if(AAscores[i] > 6.22)//if the score is in the higher bins
