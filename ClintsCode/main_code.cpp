@@ -15,7 +15,9 @@
 //Link Prediction
 //No need to give directory since it is already linked::::SB
 #include "universalFunctions/totalEdges.hpp"
-#include "printFunctions.hpp"
+#include "universalFunctions/perdictedScore.hpp"
+#include "universalFunctions/predictedSize.hpp"
+#include "universalFunctions/printFunctions.hpp"
 #include "samplingMethods/missingEdges.hpp"
 #include "sorting.hpp"
 #include "samplingMethods/xsn.hpp"
@@ -104,33 +106,43 @@ int main(int argc, char *argv[])
     int it = 1;
     int p;                  //percentage of edges removed
     int k_dist;             //distance between neighbors to be considered for missing edges
+    int k =0;     
+    float percentage;//used to get the percentage of bins used the same for common neighbors, AA, katz, and RA
+    vector<int_string> predictedEdges;//used for the predicted edges for common neighbors
+    vector<float> _predictedEdges;//used for the predicted edges for AA and katz
+    vector<int> totalScores;//represents the total number of scores for the common neighbors algorithm        
     vector<int> scores;     //represents the scores from the link prediction algorithms such as common neighbors, AA, Kantz, etc.
     vector<Edge> sampleMissing; //represents the missing edges for the sample network against itself. Represent the predicted edges. 
     vector<Edge> missing; //array representing missing edges that are in the origional network, but not the sample network
     A_Network S;           //sample network. Network_defs.hpp
-    int k = X.size() / 20; //sample network size
+    
+    k = X.size() / 20; //sample network size
     cout <<"running snowball" <<endl;
     snowball(&X, &S, k, &missing);//snowball algorithm
     missingEdges(&X, &S, &missing);//getting the edges that are in the origional network, but not the sample network
     writeBothNetworks(&X, &S, "networks/XSN");//writing networks X and S to output files
     missingSample(&S, &sampleMissing);//getting the edges that are missing in the sample against the sample graph
     writeMissing(&missing, &sampleMissing, "xsn");//writing the actual missing edges and predicted missing edges to text files
-    cout << "running common neighbors" << endl;
+    /*cout << "running common neighbors" << endl;
     commonNeighbors(&sampleMissing, &S, "xsn-cn.txt");
 
     cout <<"running AA" <<endl;
     AA(&missing, "xsn", &S);
     cout << "running katz"<<endl;
     katz(&S, &missing, "XSN");
+    */
+    
     missing.clear();//clearing the array for actual missing edges 
     sampleMissing.clear();//clearing the array representing the predicted missing edges
-    k = totalEdges(&X);
-    //k += k * (1/4);
-    forest_fire(&S, &X, k, &missing);
-    missingEdges(&X, &S, &missing);
-    writeSample(&S, "FF");
-    missingSample(&S, &sampleMissing);
-    writeMissing(&missing, &sampleMissing, "FF");
+    k = totalEdges(&X);//getting the total edges in the origional graph, which will be used for the forestfire algorithm
+    forest_fire(&S, &X, k, &missing);//forestfire algorithm
+    missingEdges(&X, &S, &missing);//getting the real missing edges that are in the originla graph but not the sample graph
+    writeSample(&S, "FF");//writing the sample network from the forestfire algorithm
+    missingSample(&S, &sampleMissing);//getting the missing edges in the sample against itself
+    writeMissing(&missing, &sampleMissing, "FF");//writing the missing edges and smaple missing edges to text files
+    totalScores = commonNeighbors(&sampleMissing, &S, "FF-cn.txt", predictedEdges, 1);//1 is a threshold and all scores >=1 will be written to the predictedEdges array
+    percentage = getPercentage(totalScores, predictedEdges);//to be used for RA, AA, and katz.    
+    threeMetrics(predictedEdges, missing, "FF-cn");
 
     return 0;   
 }

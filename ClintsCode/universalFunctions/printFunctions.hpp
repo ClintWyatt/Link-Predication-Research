@@ -41,7 +41,7 @@ void writeBothNetworks(A_Network *X, A_Network *S, string alg)
 
 void writeSample(A_Network *S, string alg)
 {
-    ofstream sample("networks/"+alg+"_sample.txt");
+    ofstream sample("networks/"+alg+"_sample.txt");//writing the the networks directory
 
     for(int i =0; i < S->size(); i++)
     {
@@ -57,8 +57,8 @@ void writeSample(A_Network *S, string alg)
 
 void writeMissing(vector<Edge> *missing, vector<Edge> *missing_S, string alg)
 {
-    ofstream missingE("results/missingEdges-" +alg + ".txt");//writting the missing edges that are in the origional graph, but missing in the sample graph to a text file
-    ofstream missingS("results/sampleMissing-" + alg + ".txt");//writing the missing nodes in the sample graph to a text file
+    ofstream missingE("results/trueMissingEdges/" +alg + ".txt");//writting the missing edges that are in the origional graph, but missing in the sample graph to a text file
+    ofstream missingS("results/sampleMissingEdges/" + alg + ".txt");//writing the missing nodes in the sample graph to a text file
     for(int i =0; i < missing->size(); i++)
     {
         missingE << missing->at(i).node1 << " " << missing->at(i).node2 << endl;

@@ -118,12 +118,6 @@ void snowball(A_Network *X, A_Network *S, int size, vector<Edge> *missing)
     }
     
     sort(&green);
-    ofstream whiteMissing("results/whiteNodes.txt");
-    for(int i =0; i < missingNodes.size(); i++)
-    {
-        whiteMissing << missingNodes[i] << endl;
-    }
-    whiteMissing.close();
     /*
     int current = red.size();
     //now getting the unknown nodes that are 
