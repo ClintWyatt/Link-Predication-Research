@@ -5,7 +5,7 @@ void commonNeighbors(vector<Edge> *missing, A_Network *X, string alg){
     int_string edgeScore;
     vector<int_string> edgeScores;
     string edgeSet;
-    ofstream output("results/" + alg);
+    ofstream output("results/predicated/" + alg);
     int score = 0;
     vector<int> scores;
     int n1, n2, k, l, cn;//k and l represent the indexes for the neighbors for node1 and node2. cn represents the common neighbors
@@ -22,13 +22,12 @@ void commonNeighbors(vector<Edge> *missing, A_Network *X, string alg){
                 l++;//go to the next index for node2's list
             }
         }
-        edgeSet = to_string(missing->at(i).node1) + "-" + to_string(missing->at(i).node2);
+        edgeSet = to_string(missing->at(i).node1) + " " + to_string(missing->at(i).node2);
         edgeScore.first = score;
         edgeScore.second = edgeSet;
         edgeScores.push_back(edgeScore);
         scores.push_back(score);
     }
-
     insertionSort(&edgeScores);//sorting the scores
     for(int i =scores.size() -1; i > -1; i--){
         output << edgeScores[i].first <<" "<<edgeScores[i].second <<endl;//writing the sorted scores to a file

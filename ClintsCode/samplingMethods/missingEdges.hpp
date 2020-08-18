@@ -1,89 +1,86 @@
 #ifndef MISSINGEDGES_HPP
 #define MISSINGEDGES_HPP
 
-
+//represents the actual missing edges
 void missingEdges(A_Network *X, A_Network *S, vector<Edge> *nonexist)
 {
-
-  bool found;
-  vector<bool> visited;
-  vector<float> scores;
-  vector<int_int> D;
-  string filename;
-  Edge mye;
-
-  //Tracks sample nodes that are visited
-  visited.resize(X->size(), false);//initializing all nodes representing visited for network X to false. 
-
-  //Visit nodes in sample network
-  for (int i = 0; i < S->size(); i++)
+  int listwX, listwS;//indexes for the lists for x and s
+  Edge mye; //represents the edge that is in the origional network but not the sample network
+  for(int i =0; i < X->size(); i++)
   {
-    //If node on sample has edges
-    if(S->at(i).ListW.size() != 0)
+    listwX =0, listwS =0;
+    if(S->at(i).ListW.size() > 0)
     {
-      visited.at(S->at(i).Row) = true;//set the row to true in the visited vector
-    }
-  }
-
-  //Getting edges that dont exist in sample, but in the origional
-  for(int i = 0; i < X->size(); i++)
-  {
-    //If the node isnt in sample, then add all edges to nonexistent 
-    if(visited.at(S->at(i).Row) == false)//if there are no edges for the row in the S network
-    {
-      //Add all edges in the same row in the X network to nonexistent list
-      for(int j = 0; j < X->at(i).ListW.size(); j++)
+      while(listwX < X->at(i).ListW.size() && listwS < S->at(i).ListW.size())//while both lists have not been looked through 
       {
-        mye.node1 = X->at(i).Row;//pushing back the node with neighbors to the edge mye
-        mye.node2 = X->at(i).ListW[j].first;
-        mye.edge_wt = 0;
-  
-        nonexist->push_back(mye);//adding the edge to the vector of edges
-      }
-    }
-    else //else check the sample node and add edges that are not in sample
-    {
-      //Check which nodes are in original but not in sample
-      for(int k = 0; k < X->at(i).ListW.size(); k++)//this loop goes through the edges for the row in network x
-      {
-        found = false;
-        for(int l = 0; l < S->at(i).ListW.size(); l++)//goes through the edges for the row in network s
-        { 
-          //node was found
-          if(S->at(i).ListW[l].first == X->at(i).ListW[k].first)//j refers to the loop at line 553
-          {
-            found = true;
-            break;
-          }
-        }
-        //Add node that is missing from sample network
-        if(found == false)
+        if(X->at(i).ListW[listwX].first >=i && X->at(i).ListW[listwX].first >S->at(i).ListW[listwS].first)//edge is not a duplicate and 
+        //the node in sorted list for x is greater than the node in sample netwroks sorted list
         {
           mye.node1 = X->at(i).Row;
-          mye.node2 = X->at(i).ListW[k].first;
-          mye.edge_wt = 0;
-
-          nonexist->push_back(mye);//pushing back the edge to the vector of edges
+          mye.node2 = X->at(i).ListW[listwX].first;
+          nonexist->push_back(mye);
+          listwS++;
         }
+        else if(X->at(i).ListW[listwX].first >=i && X->at(i).ListW[listwX].first < S->at(i).ListW[listwS].first)//edge is not a duplicate and 
+        //the node in sorted list for S is greater than the node in x networks sorted list
+        {
+          mye.node1 = X->at(i).Row;
+          mye.node2 = X->at(i).ListW[listwX].first;
+          nonexist->push_back(mye);
+          listwX++;
+        }
+        else//both are equal
+        {
+          listwX++;
+          listwS++;
+        }
+       
+      }
+      //adding the rest of the nodes to the nonexistent array since the origional networks rows will always be >= to the sample networks rows
+      while(listwX < X->at(i).ListW.size())
+      {
+        if(X->at(i).ListW[listwX].first >=i)//if the node has not been processed earlier (preventing duplicate edges)
+        {
+          mye.node1 = X->at(i).Row;
+          mye.node2 = X->at(i).ListW[listwX].first;
+          nonexist->push_back(mye);
+        }
+        listwX++;
       }
     }
+    else//the s networks row is empty
+    {
+       while(listwX < X->at(i).ListW.size())
+        {
+          if(X->at(i).ListW[listwX].first >=i)//if the edge has not been processed earlier (preventing duplicate edges)
+          {
+            mye.node1 = X->at(i).Row;
+            mye.node2 = X->at(i).ListW[listwX].first;
+            nonexist->push_back(mye);
+          }
+          listwX++;
+        }
+    }
+   
   }
 }
 
-void missingSample( A_Network *S, vector<Edge> *missing)
+//represents the predicted edges missing
+void missingSample(A_Network *S, vector<Edge> *missing)
 {
   Edge mye;//represents the edge to be added to the missing list
-  bool found = false;
+  bool found;//used to see if i is in the S networks' j row
   for(int i=0; i < S->size(); i++)
   {
-    for(int j =i+1; j <S->size(); j++)
+    found = false;
+    for(int j =i+1; j <S->size(); j++)//going through every node (row) below in the sample network
     {
-      for(int k =0; k < S->at(j).ListW.size(); k++)
+      for(int k =0; k < S->at(j).ListW.size(); k++)//going through an individual row that is below 
       {
-        if(S->at(j).ListW[k].first == i)
+        if(S->at(j).ListW[k].first == i)//if the node in j row of the S network is the same as i (an edge is between the node in the list for the sample's row and i)
         {
           found = true;
-          break;
+          break;//go to the next row since an edge exists between i and a node in the current row
         }
       }
       if(found == false)//if the edge between i and j was not found, add it to the missing edges array

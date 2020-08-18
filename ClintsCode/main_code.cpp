@@ -14,15 +14,7 @@
 
 //Link Prediction
 //No need to give directory since it is already linked::::SB
-/*
-#include "detach_edges.hpp"
-#include "nonexist_links.hpp"
-#include "compute_precision_recall.hpp"
-#include "universal_func.hpp"
-#include "get_scores.hpp"
-#include "calculate_and_print.hpp"
-#include "sampling.hpp"
-*/
+#include "universalFunctions/totalEdges.hpp"
 #include "printFunctions.hpp"
 #include "samplingMethods/missingEdges.hpp"
 #include "sorting.hpp"
@@ -30,6 +22,9 @@
 #include "link-predMethods/commonNeighbors.hpp"
 #include "link-predMethods/AA.hpp"
 #include "link-predMethods/katz.hpp"
+#include "samplingMethods/randomEdge.hpp"
+#include "samplingMethods/randomEdge.hpp"
+#include "samplingMethods/forestFire.hpp"
 /*** All Headers Required From ESSENS **/
 
 using namespace std;
@@ -105,36 +100,37 @@ int main(int argc, char *argv[])
     set_opposite_index(&X);
     //print_detail(X);
     //print_edgelist(X);
+    string alg; //represents the algorithm that is used for writing the sample network graphs
     int it = 1;
     int p;                  //percentage of edges removed
     int k_dist;             //distance between neighbors to be considered for missing edges
     vector<int> scores;     //represents the scores from the link prediction algorithms such as common neighbors, AA, Kantz, etc.
-    vector<Edge> sampleMissing; //represents the missing edges for the sample network against itself. Will be significantly larger than the missing array below
+    vector<Edge> sampleMissing; //represents the missing edges for the sample network against itself. Represent the predicted edges. 
     vector<Edge> missing; //array representing missing edges that are in the origional network, but not the sample network
     A_Network S;           //sample network. Network_defs.hpp
-    int k = X.size() / 8; //sample network size
+    int k = X.size() / 20; //sample network size
     cout <<"running snowball" <<endl;
-    snowball(&X, &S, k);//snowball algorithm
-    writeNetwork(&X, &S, "networks/XSN");//writing networks X and S to output files
+    snowball(&X, &S, k, &missing);//snowball algorithm
     missingEdges(&X, &S, &missing);//getting the edges that are in the origional network, but not the sample network
-    missingSample(&S, &sampleMissing);
-    ofstream missingE("results/missingEdges.txt");//writting the missing edges that are in the origional graph, but missing in the sample graph to a text file
-    ofstream missingS("results/sampleMissing.txt");//writing the missing nodes in the sample graph to a text file
-    for(int i =0; i < missing.size(); i++)
-    {
-        missingE << missing[i].node1 << " " << missing[i].node2 << endl;
-    }
-    for(int i =0; i < sampleMissing.size(); i++)
-    {
-        missingS << sampleMissing[i].node1 << " "<< sampleMissing[i].node2 <<endl;
-    }
-    missingE.close();
+    writeBothNetworks(&X, &S, "networks/XSN");//writing networks X and S to output files
+    missingSample(&S, &sampleMissing);//getting the edges that are missing in the sample against the sample graph
+    writeMissing(&missing, &sampleMissing, "xsn");//writing the actual missing edges and predicted missing edges to text files
     cout << "running common neighbors" << endl;
-    commonNeighbors(&missing, &S, "xsn-sample");
+    commonNeighbors(&sampleMissing, &S, "xsn-cn.txt");
 
     cout <<"running AA" <<endl;
     AA(&missing, "xsn", &S);
     cout << "running katz"<<endl;
     katz(&S, &missing, "XSN");
+    missing.clear();//clearing the array for actual missing edges 
+    sampleMissing.clear();//clearing the array representing the predicted missing edges
+    k = totalEdges(&X);
+    //k += k * (1/4);
+    forest_fire(&S, &X, k, &missing);
+    missingEdges(&X, &S, &missing);
+    writeSample(&S, "FF");
+    missingSample(&S, &sampleMissing);
+    writeMissing(&missing, &sampleMissing, "FF");
+
     return 0;   
 }

@@ -1,10 +1,10 @@
 #ifndef XSN_HPP
 #define XSN_HPP
-
-
+#include "fillMissingRows.hpp"
+#include "missingEdges.hpp"
 using namespace std;
 
-void snowball(A_Network *X, A_Network *S, int size)
+void snowball(A_Network *X, A_Network *S, int size, vector<Edge> *missing)
 {
     /*data structures */
 
@@ -12,7 +12,7 @@ void snowball(A_Network *X, A_Network *S, int size)
     vector<int> green;//represents a set of nodes from the X network that are the sample nodes. Is represented as "green" nodes in the paper
     vector<int> red;//neighbors of the sample nodes (green nodes). Represented as "red" nodes in the paper. 
     vector<int> marked; //used to prevent duplicates in the red array
-
+    vector<int> missingNodes; //used to represent the nodes thar were not added to the sample
     /*int_int vector*/
     vector<int_int> white;//nodes that are adjacent to the red nodes, but not the green nodes. They are unknown nodes and are
     //"white" nodes in the paper. 
@@ -111,17 +111,19 @@ void snowball(A_Network *X, A_Network *S, int size)
     for(int i =0; i < red.size(); i++)
     {
         if((red[i] == 1 /*|| red[i] == 2) && (marked[i] == 0)*/))//if the nodes are red/white and not green. 
-        green.push_back(i);
+            green.push_back(i);
+        else if(red[i] == 0 && marked[i] == 0)
+            missingNodes.push_back(i);//putting the node that is not in the sample into another array
+        
     }
     
     sort(&green);
-    /*
-    cout << "all nodes to be used for the sample graph " << endl;
-    for(int i =0; i < green.size(); i++)
+    ofstream whiteMissing("results/whiteNodes.txt");
+    for(int i =0; i < missingNodes.size(); i++)
     {
-        cout << green[i] << endl;
+        whiteMissing << missingNodes[i] << endl;
     }
-    */
+    whiteMissing.close();
     /*
     int current = red.size();
     //now getting the unknown nodes that are 
@@ -148,22 +150,37 @@ void snowball(A_Network *X, A_Network *S, int size)
 
     //for adding nodes to the sample graph, add all nodes that are connected to red and green nodes. Create a induced subgraph of the sample nodes
     int_double neighbor;//used to add neighbors to the sample network
-    for(int i =0; i < green.size(); i++)
+
+    int listw_index;//used to loop through the rows of the X network
+    int greenIndex;//used to loop through the nodes from the result of the snowball algorithm
+
+    //Try to prevent empty rows
+    for(int i =0, j =0; i < X->size(); i++)
     {
-        for(int j=0; j < X->size(); j++)
-        {
-            for(int k =0; k < X->at(j).ListW.size(); k++)
+        listw_index = 0;
+        greenIndex = 0;
+        if(i == green[j])//if the node in the snowball array is the same as the row in the x network
+        {        
+            j++;
+            while(listw_index < X->at(i).ListW.size() && greenIndex < green.size())//comparing the nodes from the snowball algorithm with a row of the x network
             {
-                if(green[i] != X->at(j).Row && green[i] == X->at(j).ListW[k].first)//preventing self loops
+                if(green[greenIndex] < X->at(i).ListW[listw_index].first){greenIndex++;}
+                else if(green[greenIndex] > X->at(i).ListW[listw_index].first){listw_index++;}
+                else
                 {
-                    neighbor.first = X->at(j).ListW[k].first;
-                    neighbor.second = X->at(j).ListW[k].second;
-                    S->at(j).ListW.push_back(neighbor);//adding the neighbor to the row on the sample network
+                    if(green[greenIndex] != i)//if the node in the snowball array is not the same as the row we are on in the s network
+                    {
+                        neighbor.first = X->at(i).ListW[listw_index].first;//neighbor.first is the node
+                        neighbor.second = X->at(i).ListW[listw_index].second;//neighbor.second is the edge weight
+                        S->at(i).ListW.push_back(neighbor);//adding the neighbor to the row on the sample network
+                    }
+                    greenIndex++;
+                    listw_index++;
                 }
+                
             }
         }
-    }
-
+   }
 }
 
 #endif
