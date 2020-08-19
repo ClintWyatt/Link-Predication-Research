@@ -6,6 +6,7 @@ template <class myType>
 void insertionSort(vector<myType> *scores){
     int i, j;
     myType key;  
+
     for (i = 1; i < scores->size(); i++) {  
         key = scores->at(i);  
         j = i - 1;  
@@ -41,7 +42,28 @@ void insertionSort(vector<int_string> *scores){
 }
 
 
-const int_string & median3(vector<int_string> & a, int left, int right)
+void insertionSort(vector<float_string> *scores){
+    int i, j;
+    float key;
+    string str;  
+    for (i = 1; i < scores->size(); i++) {  
+        key = scores->at(i).first;  
+        str = scores->at(i).second;
+        j = i - 1;  
+        while (j >= 0 && scores->at(j).first > key) {  
+            scores->at(j + 1) = scores->at(j);  
+            j = j - 1;  
+        }  
+        scores->at(j + 1).first = key;  
+        scores->at(j + 1).second = str;
+    }
+}
+
+/*quicksort algorithm
+Although we are using a template, only use the pair vectors for quicksort (int_string, float_string, int_double, etc). Will not work for a single data type
+*/
+
+const float_string & median3(vector<float_string> & a, int left, int right)
 {
 	 int center = (left + right) / 2;
 	
@@ -57,7 +79,8 @@ const int_string & median3(vector<int_string> & a, int left, int right)
 	 return a[right - 1];
 }
 
-void insertionsort(vector<int_string> & a, int left, int right)
+
+void insertionsort(vector<float_string> & a, int left, int right)
 {
 	//insertion sort is slightly different than the normal insertionsort. p = left is the main difference
 	//as well as the right +1
@@ -65,20 +88,22 @@ void insertionsort(vector<int_string> & a, int left, int right)
 	int j;
 	for (int p = left; p < right+1; p++) //right +1 needed for the larger part since the inital right is the last index
 	{
-		int tmp = a[p].first;
+		float tmp = a[p].first;
+		string str = a[p].second;
 		for (j = p; j > left && tmp < a[j - 1].first; j--)
 		{
 			a[j] = a[j - 1];
 		}
 		a[j].first = tmp;
+		a[j].second = str;
 	}
 }
 
-void quicksort(vector<int_string> & a, int left, int right)
+void quicksort(vector<float_string> & a, int left, int right)
 {
 	if (left + 10 <= right)
 	{
-		int_string pivot = median3(a, left, right);
+		float_string pivot = median3(a, left, right);
 		int center = (left + right) / 2;
 		// Begin partitioning
 		int i = left, j = right - 1;
@@ -100,5 +125,6 @@ void quicksort(vector<int_string> & a, int left, int right)
 	else // Do an insertion sort on the subarray
 	    insertionsort(a, left, right);
 }
+/*quicksort algorithm end */
 
 #endif

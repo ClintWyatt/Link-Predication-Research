@@ -59,15 +59,15 @@ int pathLength4(vector<int> *node1Neighbors, vector<int> *node2Neighbors, Edge m
     return score;
 }
 
-void katz(A_Network *X, vector<Edge> *missing, string alg)
+
+void katz(A_Network *X, vector<Edge> *missing, vector<float_string> & predictedEdges, string alg)
 {
     vector<int> node1Neighbors;//represents nodes that are on a path for node1. Gets updated every time we go a path futher (n + 1).
     vector<int> node2Neighbors;//represents the nodes that are adjacent to node2. Used for path of 3
     float score;//represetns the score for the missing edges
-    vector<float>scores;
+    string edge; //represents the 
+    float_string index;
     int n1, n2, commonCount;//n1 and n2 are indexes in the lists of node1 and node2 of the missing edge. Commoncount represents the number of paths for lengths of 1, 2, and 3.
-    ofstream katzResults("results/"+alg+"katz.txt");
-    ofstream katzPredicated("results/predicated/"+alg+"katz.txt");
     for(int i =0; i < missing->size(); i++)
     {
         //cout <<"missing edge: " << missing->at(i).node1 << " " << missing->at(i).node2 << endl;
@@ -112,32 +112,14 @@ void katz(A_Network *X, vector<Edge> *missing, string alg)
         }
         //cout <<"path 2 is " <<commonCount << endl;
         score += pow(0.05, 2) * commonCount;
-        for(int j =2; j < 4; j++)
-        {
-            if(j == 2)//path of 3
-            {
-                score += pow(0.05, j+1) * pathLength3(&node1Neighbors, &node2Neighbors, missing->at(i), X);
-            }
-            /* use the else statement below if a path of 4 is required
-            else
-            {
-                score += pow(0.05, j+1) * pathLength4(&node1Neighbors, &node2Neighbors, missing->at(i), X);
-            }
-            */
-        }
-        //cout << score << endl;
-        scores.push_back(score);
+        //pathlength of 3
+        score += pow(0.05, 3) * pathLength3(&node1Neighbors, &node2Neighbors, missing->at(i), X);
+        index.first = score;
+        edge = to_string(missing->at(i).node1) + " " + to_string(missing->at(i).node2);
+        index.second = edge;
+        predictedEdges.push_back(index);
     }
-    insertionSort(&scores);//sorting the scores using insertion sort
-
-    for(int i =scores.size()-1; i > -1; i--)
-    {
-        if(scores[i] >= 0.5)//threshold based off the aves-wildbird file
-        {
-            katzPredicated << scores[i] << endl;
-        }
-        katzResults << scores[i]<<endl;
-    }
-    katzResults.close();
+    //insertionSort(&scores);//sorting the scores using insertion sort
+    quicksort(predictedEdges, 0, predictedEdges.size() -1);
 }
 #endif

@@ -5,9 +5,9 @@ using namespace std;
 template<class myType>
 vector<int> commonNeighbors(vector<Edge> *missing, A_Network *X, string alg, vector<myType> &predictedEdges, int threshold)
 {
-    int_string edgeScore;
-    vector<int_string> edgeScores;
-    string edgeSet;
+    int_string edgeScore;//used to add edges to the edgescore array
+    vector<int_string> edgeScores;//used to write the predicted edges to a file
+    string edgeSet;//used with the edgeScore variable
     ofstream output("results/predicated/" + alg);//used to write the predicted missing edges for a threshold
     int score = 0;
     vector<int> scores;
@@ -29,13 +29,13 @@ vector<int> commonNeighbors(vector<Edge> *missing, A_Network *X, string alg, vec
         edgeScore.first = score;//getting the common neighbor count
         edgeScore.second = edgeSet;//getting the string of the edge
         edgeScores.push_back(edgeScore);//adding the edge score, which contains the number of common neighbors and the edge
-        scores.push_back(score);
-        if(score >=threshold){predictedEdges.push_back(edgeScore);}
+        scores.push_back(score);//pushing back the score
+        if(score >=threshold){predictedEdges.push_back(edgeScore);}//add the desired score to the predictedEdges array
     }
     //insertionSort(&edgeScores);//sorting the scores
-    quicksort(predictedEdges, 0, predictedEdges.size()-1);
-    for(int i =predictedEdges.size() -1; i > -1; i--)
-    {
+    //quicksort(predictedEdges, 0, predictedEdges.size()-1);
+    insertionSort(&predictedEdges);
+    for(int i =predictedEdges.size() -1; i > -1; i--){
         output << predictedEdges[i].first <<" "<<predictedEdges[i].second <<endl;//writing the sorted scores to a file
     }
     output.close();

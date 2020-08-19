@@ -15,15 +15,16 @@
 //Link Prediction
 //No need to give directory since it is already linked::::SB
 #include "universalFunctions/totalEdges.hpp"
-#include "universalFunctions/perdictedScore.hpp"
-#include "universalFunctions/predictedSize.hpp"
+#include "universalFunctions/metrics.hpp"
+#include "universalFunctions/percentage.hpp"
 #include "universalFunctions/printFunctions.hpp"
+#include "universalFunctions/sorting.hpp"
 #include "samplingMethods/missingEdges.hpp"
-#include "sorting.hpp"
 #include "samplingMethods/xsn.hpp"
 #include "link-predMethods/commonNeighbors.hpp"
 #include "link-predMethods/AA.hpp"
 #include "link-predMethods/katz.hpp"
+#include "link-predMethods/RA.hpp"
 #include "samplingMethods/randomEdge.hpp"
 #include "samplingMethods/randomEdge.hpp"
 #include "samplingMethods/forestFire.hpp"
@@ -106,12 +107,13 @@ int main(int argc, char *argv[])
     int it = 1;
     int p;                  //percentage of edges removed
     int k_dist;             //distance between neighbors to be considered for missing edges
-    int k =0;     
+    int k =0; 
+    int threshold;     
     float percentage;//used to get the percentage of bins used the same for common neighbors, AA, katz, and RA
     vector<int_string> predictedEdges;//used for the predicted edges for common neighbors
-    vector<float> _predictedEdges;//used for the predicted edges for AA and katz
-    vector<int> totalScores;//represents the total number of scores for the common neighbors algorithm        
-    vector<int> scores;     //represents the scores from the link prediction algorithms such as common neighbors, AA, Kantz, etc.
+    vector<float_string> _predictedEdges;//used for the predicted edges for AA, RA, and katz
+    vector<int> intScores;//represents the total number of scores for the common neighbors algorithm        
+    vector<float> floatScores; //represents the scores from the link prediction algorithms such as common neighbors, AA, Kantz, etc.
     vector<Edge> sampleMissing; //represents the missing edges for the sample network against itself. Represent the predicted edges. 
     vector<Edge> missing; //array representing missing edges that are in the origional network, but not the sample network
     A_Network S;           //sample network. Network_defs.hpp
@@ -131,7 +133,7 @@ int main(int argc, char *argv[])
     cout << "running katz"<<endl;
     katz(&S, &missing, "XSN");
     */
-    
+    threshold = 4;
     missing.clear();//clearing the array for actual missing edges 
     sampleMissing.clear();//clearing the array representing the predicted missing edges
     k = totalEdges(&X);//getting the total edges in the origional graph, which will be used for the forestfire algorithm
@@ -139,10 +141,32 @@ int main(int argc, char *argv[])
     missingEdges(&X, &S, &missing);//getting the real missing edges that are in the originla graph but not the sample graph
     writeSample(&S, "FF");//writing the sample network from the forestfire algorithm
     missingSample(&S, &sampleMissing);//getting the missing edges in the sample against itself
-    writeMissing(&missing, &sampleMissing, "FF");//writing the missing edges and smaple missing edges to text files
-    totalScores = commonNeighbors(&sampleMissing, &S, "FF-cn.txt", predictedEdges, 1);//1 is a threshold and all scores >=1 will be written to the predictedEdges array
-    percentage = getPercentage(totalScores, predictedEdges);//to be used for RA, AA, and katz.    
-    threeMetrics(predictedEdges, missing, "FF-cn");
 
+    /*computing the metrics for CN, RA, AA, and katz */
+    writeMissing(&missing, &sampleMissing, "FF");//writing the missing edges and smaple missing edges to text files
+    intScores = commonNeighbors(&sampleMissing, &S, "FF-cn.txt", predictedEdges, threshold);//1 is a threshold and all scores >=1 will be written to the predictedEdges array
+    k = getIndex(intScores, predictedEdges, threshold);//Gets the size up to the threshold for common neighbors. k will be used for katz, AA, and RA.
+    writePredicted(predictedEdges, "FF-CN", k+1);
+    cout << "metrics for common neighbors"<<endl;   
+    threeMetrics(predictedEdges, missing, "FF-cn");//calculating the recall, percision, and f1 value
+    predictedEdges.clear();//clearing the predictedEdges array to be used for AA
+    floatScores = AA(&sampleMissing, _predictedEdges, &S);
+    _predictedEdges = setPredictedEdges(_predictedEdges, k+1);
+    cout << k << endl;
+    writePredicted(_predictedEdges, "FF-AA", k+1);
+    cout << "metrics for AA"<<endl;
+    threeMetrics(_predictedEdges, missing, "FF-AA");
+    _predictedEdges.clear();
+    katz(&S, &sampleMissing, _predictedEdges, "FF-katz");
+     _predictedEdges = setPredictedEdges(_predictedEdges, k+1);
+    writePredicted(_predictedEdges, "FF-katz", k+1);
+    cout <<"metrics for katz"<<endl;
+    threeMetrics(_predictedEdges, missing, "FF-katz");
+    _predictedEdges.clear();
+    RA(&sampleMissing, _predictedEdges, &S);
+     _predictedEdges = setPredictedEdges(_predictedEdges, k+1);
+    writePredicted(_predictedEdges, "FF-RA", k+1);
+    cout <<"metrics for RA" << endl;
+    threeMetrics(_predictedEdges, missing, "FF-RA");
     return 0;   
 }

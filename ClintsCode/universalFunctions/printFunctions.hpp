@@ -70,4 +70,18 @@ void writeMissing(vector<Edge> *missing, vector<Edge> *missing_S, string alg)
     missingE.close();
     missingS.close();
 }
+
+//writing the predicted missing edges for AA, RA, and katz
+template <class myType>
+void writePredicted(vector<myType> & predictedMissing, string alg, int size)
+{
+
+    ofstream output("results/predicated/" + alg + ".txt");//directory and the type of algorithm for writing to a file
+    for(int i = predictedMissing.size() -1; i > 0; i--)
+    {
+        output << predictedMissing[i].first << " " << predictedMissing[i].second << endl;
+
+    }
+    output.close();
+}
 #endif

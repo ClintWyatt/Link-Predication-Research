@@ -1,12 +1,10 @@
-#ifndef AA_HPP
-#define AA_HPP
+#ifndef RA_HPP
+#define RA_HPP
 
-
-
-vector<float> AA(vector<Edge> *missing, vector<float_string> & predictedMissing, A_Network *X)
+void RA(vector<Edge> *missing, vector<float_string> & predictedMissing, A_Network *X)
 {
+    vector<float> scores;
     float score;//represents the score of edge
-    vector<float> AAscores;//represents AA scores
     float_string index; //used to add elements to the predictedMissing array
     string edge; //used to represent the edge of the score
     int n1, n2, k, l, cn;//k and l represent the indexes for the neighbors for node1 and node2. cn represents the common neighbors
@@ -22,10 +20,10 @@ vector<float> AA(vector<Edge> *missing, vector<float_string> & predictedMissing,
             else if(X->at(n1).ListW[k].first > X->at(n2).ListW[l].first){l++;}//if the node in nodes2's list is less than the node in node1's list
             else//if there is a common neighbor
             {
-                if(X->at(X->at(n1).ListW[k].first).ListW.size() >1)//if the common neighbors list is connected to more than 1 node (log(1) =0)
+                if(X->at(X->at(n1).ListW[k].first).ListW.size() >0)//if the common neighbors list is connected to more than 1 node (log(1) =0)
                 {
                     //cout << "degree of node being added for: " <<X->at(n1).ListW[k].first <<" is " << X->at(X->at(n1).ListW[k].first).ListW.size();
-                    score += 1.0/log(X->at(X->at(n1).ListW[k].first).ListW.size());//adding to the score
+                    score += 1.0/(float(X->at(X->at(n1).ListW[k].first).ListW.size()));//adding to the score
                     //cout <<" With value " << 1/log(X->at(X->at(n1).ListW[k].first).ListW.size()) << endl;
                 }
                 k++;//go to the next index for node1's list
@@ -33,18 +31,13 @@ vector<float> AA(vector<Edge> *missing, vector<float_string> & predictedMissing,
                 cn++;//increment the number of common neighbors
             }
         }
-        AAscores.push_back(score);
         edge = to_string(n1) + " " + to_string(n2);
         index.first = score;
         index.second = edge;
         predictedMissing.push_back(index);
+        scores.push_back(score);
     }
-    //insertionSort(&AAscores);//sort the scores for easier output for excell
     quicksort(predictedMissing, 0, predictedMissing.size()-1);
-    //insertionSort(&predictedMissing);
-
-    //count the number of different bins and multiply the total number of bins by the percentage. The result will be the number of bins to test
-
-    return AAscores;
 }
+
 #endif
