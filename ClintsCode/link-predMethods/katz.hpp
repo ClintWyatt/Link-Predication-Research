@@ -119,7 +119,9 @@ void katz(A_Network *X, vector<Edge> *missing, vector<float_string> & predictedE
         index.second = edge;
         predictedEdges.push_back(index);
     }
-    //insertionSort(&scores);//sorting the scores using insertion sort
+    //insertionSort(&predictedEdges);//sorting the scores using insertion sort
     quicksort(predictedEdges, 0, predictedEdges.size() -1);
+
+    cout <<"last index for katz: " << predictedEdges[predictedEdges.size()-1].first << endl;
 }
 #endif

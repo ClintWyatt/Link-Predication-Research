@@ -1,6 +1,6 @@
 #ifndef PERCENTAGE_HPP
 #define PERCENTAGE_HPP
-
+#include "sorting.hpp"
 using namespace std;
 
 int getIndex(vector<int> &scores, vector<int_string> &predictedEdges, int threshold)
@@ -15,18 +15,26 @@ int getIndex(vector<int> &scores, vector<int_string> &predictedEdges, int thresh
 }
 
 //method will be used to get the same predicted edges size of values for AA, RA, and katz as common neighbors
-template <class myType>
-vector<myType> setPredictedEdges(vector<myType> & predictedEdges, int index)
+
+void setPredictedEdges(vector<float_string> & predictedEdges, int index, int threshold)
 {
-    vector<myType> finalPredictedEdges;
-    myType _index;
-    for(int i = predictedEdges.size()-1; i > (predictedEdges.size()-1) - index; i--)
+    if(threshold > 0)//if the threshold is greater than zero
     {
-        _index.first = predictedEdges[i].first;
-        _index.second = predictedEdges[i].second;
-        finalPredictedEdges.push_back(_index);
+        vector<float_string> finalPredictedEdges;
+        float_string _index;
+        for(int i = predictedEdges.size()-1; i > (predictedEdges.size()-1) - index; i--)
+        {
+            _index.first = predictedEdges[i].first;
+            _index.second = predictedEdges[i].second;
+            finalPredictedEdges.push_back(_index);
+        }
+
+        predictedEdges.clear();
+        for(int i = finalPredictedEdges.size() -1; i > -1;  i--)
+        {
+            predictedEdges.push_back(finalPredictedEdges[i]);
+        }
     }
-    return finalPredictedEdges;
 }
 
 #endif

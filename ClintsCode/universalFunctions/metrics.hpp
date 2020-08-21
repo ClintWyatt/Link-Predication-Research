@@ -2,17 +2,22 @@
 #define PERDICTEDSCORE_HPP
 
 using namespace std;
+float f1Value(float precision, float recall);
 
 template <class myType>
 void threeMetrics(vector<myType> &predictedEdges, vector<Edge> &missing, string predMethod)
 {
     ofstream results("results/correctMissingEdges/"+predMethod+".txt");//used to write the correct missing edges to a text file
+    ofstream metrics;
+    metrics.open("results/metricScores/"+predMethod+".txt", ofstream::out | ofstream::app);
     int pe = predictedEdges.size(); //perdicted missing edges
     int ce = 0; //correctly perdicted edges
     int oe = missing.size();//oe represents the actual missing edges.
     float precision;// ce divided by pe
     float recall; // ce diviede by oe
+    float f1;
     string edge;//used to represent the edge in for the real missing edges
+    //cout << predictedEdges.size() << endl;
     for(int i =0; i < missing.size(); i++)
     {
         edge += to_string(missing[i].node1) + " " + to_string(missing[i].node2);
@@ -27,19 +32,21 @@ void threeMetrics(vector<myType> &predictedEdges, vector<Edge> &missing, string 
         }
         edge.clear();
     }
-    precision = float(ce) / float(pe);
-    cout << "Precision: " << precision << endl;
-    recall = float(ce) / float(oe);
-    cout << "Recall: " << recall <<endl;
     results.close();
-    cout << endl;
+    precision = float(ce) / float(pe);
+    recall = float(ce) / float(oe);
+    metrics << "Precision: "<< precision <<endl;
+    metrics << "Recall " <<recall <<endl;
+    metrics << "F1 value: "<<f1Value(precision, recall) <<endl;
+    metrics <<endl;
+    metrics.close();
 }
 
 
 
-void f1Value()
+float f1Value(float precision, float recall)
 {
-
+    return 2.0 * (precision * recall) / (precision + recall);
 }
 
 #endif

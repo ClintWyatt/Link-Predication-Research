@@ -1,7 +1,7 @@
 #ifndef SORTING_HPP
 #define SORTING_HPP
 using namespace std;
-
+/*
 template <class myType>
 void insertionSort(vector<myType> *scores){
     int i, j;
@@ -11,9 +11,7 @@ void insertionSort(vector<myType> *scores){
         key = scores->at(i);  
         j = i - 1;  
   
-        /* Move elements of arr[0..i-1], that are  
-        greater than key, to one position ahead  
-        of their current position */
+
         while (j >= 0 && scores->at(j) > key) {  
             scores->at(j + 1) = scores->at(j);  
             j = j - 1;  
@@ -21,10 +19,10 @@ void insertionSort(vector<myType> *scores){
         scores->at(j + 1) = key;  
     }
 }
+*/ 
 
-
-
-void insertionSort(vector<int_string> *scores){
+template <class myType>
+void insertionSort(vector<myType> *scores){
     int i, j;
     int key;
     string str;  
@@ -41,7 +39,7 @@ void insertionSort(vector<int_string> *scores){
     }
 }
 
-
+/*
 void insertionSort(vector<float_string> *scores){
     int i, j;
     float key;
@@ -58,11 +56,10 @@ void insertionSort(vector<float_string> *scores){
         scores->at(j + 1).second = str;
     }
 }
-
+*/
 /*quicksort algorithm
 Although we are using a template, only use the pair vectors for quicksort (int_string, float_string, int_double, etc). Will not work for a single data type
 */
-
 const float_string & median3(vector<float_string> & a, int left, int right)
 {
 	 int center = (left + right) / 2;

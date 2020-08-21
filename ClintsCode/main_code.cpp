@@ -19,6 +19,7 @@
 #include "universalFunctions/percentage.hpp"
 #include "universalFunctions/printFunctions.hpp"
 #include "universalFunctions/sorting.hpp"
+#include "universalFunctions/removeDuplicates.hpp"
 #include "samplingMethods/missingEdges.hpp"
 #include "samplingMethods/xsn.hpp"
 #include "link-predMethods/commonNeighbors.hpp"
@@ -50,6 +51,7 @@ int main(int argc, char *argv[])
     if (!the_file.is_open())
     {
         cout << "INPUT ERROR:: Could not open file\n";
+        return -1;
     }
 
     A_Network X;//adjacency list. Template is from network_defs.hpp
@@ -120,6 +122,7 @@ int main(int argc, char *argv[])
     
     k = X.size() / 20; //sample network size
     cout <<"running snowball" <<endl;
+    removeDuplicateEdges(X);//removing duplicate edges if they exist
     snowball(&X, &S, k, &missing);//snowball algorithm
     missingEdges(&X, &S, &missing);//getting the edges that are in the origional network, but not the sample network
     writeBothNetworks(&X, &S, "networks/XSN");//writing networks X and S to output files
@@ -133,7 +136,7 @@ int main(int argc, char *argv[])
     cout << "running katz"<<endl;
     katz(&S, &missing, "XSN");
     */
-    threshold = 4;
+    threshold = 9;
     missing.clear();//clearing the array for actual missing edges 
     sampleMissing.clear();//clearing the array representing the predicted missing edges
     k = totalEdges(&X);//getting the total edges in the origional graph, which will be used for the forestfire algorithm
@@ -146,27 +149,30 @@ int main(int argc, char *argv[])
     writeMissing(&missing, &sampleMissing, "FF");//writing the missing edges and smaple missing edges to text files
     intScores = commonNeighbors(&sampleMissing, &S, "FF-cn.txt", predictedEdges, threshold);//1 is a threshold and all scores >=1 will be written to the predictedEdges array
     k = getIndex(intScores, predictedEdges, threshold);//Gets the size up to the threshold for common neighbors. k will be used for katz, AA, and RA.
-    writePredicted(predictedEdges, "FF-CN", k+1);
-    cout << "metrics for common neighbors"<<endl;   
+    cout << k << endl;
+    writePredictedCn(predictedEdges, "FF-CN");
+    cout << "Running metrics for common neighbors"<<endl;   
     threeMetrics(predictedEdges, missing, "FF-cn");//calculating the recall, percision, and f1 value
     predictedEdges.clear();//clearing the predictedEdges array to be used for AA
-    floatScores = AA(&sampleMissing, _predictedEdges, &S);
-    _predictedEdges = setPredictedEdges(_predictedEdges, k+1);
-    cout << k << endl;
-    writePredicted(_predictedEdges, "FF-AA", k+1);
-    cout << "metrics for AA"<<endl;
+    
+    AA(&sampleMissing, _predictedEdges, &S);
+    setPredictedEdges(_predictedEdges, k, threshold);
+    writePredicted(_predictedEdges, "FF-AA");
+    cout << "Running metrics for AA"<< endl;
     threeMetrics(_predictedEdges, missing, "FF-AA");
     _predictedEdges.clear();
+
     katz(&S, &sampleMissing, _predictedEdges, "FF-katz");
-     _predictedEdges = setPredictedEdges(_predictedEdges, k+1);
-    writePredicted(_predictedEdges, "FF-katz", k+1);
-    cout <<"metrics for katz"<<endl;
+    setPredictedEdges(_predictedEdges, k, threshold);
+    writePredicted(_predictedEdges, "FF-katz");
+    cout <<"Running metrics for katz"<<endl;
     threeMetrics(_predictedEdges, missing, "FF-katz");
     _predictedEdges.clear();
+
     RA(&sampleMissing, _predictedEdges, &S);
-     _predictedEdges = setPredictedEdges(_predictedEdges, k+1);
-    writePredicted(_predictedEdges, "FF-RA", k+1);
-    cout <<"metrics for RA" << endl;
+    setPredictedEdges(_predictedEdges, k, threshold);
+    writePredicted(_predictedEdges, "FF-RA");
+    cout <<"Running metrics for RA" << endl;
     threeMetrics(_predictedEdges, missing, "FF-RA");
     return 0;   
 }

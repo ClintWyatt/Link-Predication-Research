@@ -35,6 +35,7 @@ vector<int> commonNeighbors(vector<Edge> *missing, A_Network *X, string alg, vec
     //insertionSort(&edgeScores);//sorting the scores
     //quicksort(predictedEdges, 0, predictedEdges.size()-1);
     insertionSort(&predictedEdges);
+    //cout << "last index for common neighbors " << predictedEdges[predictedEdges.size()-1].first << endl;
     for(int i =predictedEdges.size() -1; i > -1; i--){
         output << predictedEdges[i].first <<" "<<predictedEdges[i].second <<endl;//writing the sorted scores to a file
     }

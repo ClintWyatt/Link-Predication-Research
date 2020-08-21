@@ -38,6 +38,7 @@ void RA(vector<Edge> *missing, vector<float_string> & predictedMissing, A_Networ
         scores.push_back(score);
     }
     quicksort(predictedMissing, 0, predictedMissing.size()-1);
+    //insertionSort(&predictedMissing);
 }
 
 #endif

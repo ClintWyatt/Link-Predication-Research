@@ -11,7 +11,7 @@ void forest_fire(A_Network *S, A_Network *X, int k, vector<Edge> *missing)
   int seed_node; 
   int rando, S_edges = 0;
   queue<int> nodeQueue;
-  vector<bool> visited;
+  vector<bool> visited;//represents nodes that have been burned
 
   cout << "Running Forest Fire\n";
 
@@ -38,18 +38,15 @@ void forest_fire(A_Network *S, A_Network *X, int k, vector<Edge> *missing)
     {
       //Burn node: Add node to queue if link was burned
       rando = rand() % 100 + 1; //Random number
-      if (rando <= pf)          //Burn link with probability of pf
+      if (rando <= pf)//Burn link with probability of pf
       { 
-        //Check if node has already burned links
-        if(visited.at(X->at(seed_node).ListW[i].first) == false)
+        if(visited.at(X->at(seed_node).ListW[i].first) == false)//if node is not burned
         {
-          //Add node to queue
-          nodeQueue.push(X->at(seed_node).ListW[i].first);
-          //visit node
-          visited.at(X->at(seed_node).ListW[i].first) = true;
+          nodeQueue.push(X->at(seed_node).ListW[i].first);//add burned node to the queue
+          visited.at(X->at(seed_node).ListW[i].first) = true;//node is now burned
         }      
       }
-      else //Add non-burned edge to sample
+      else//Add non-burned edge to sample
       {
         S->at(seed_node).ListW.push_back(X->at(seed_node).ListW[i]);
         S->at(seed_node).Ops.push_back(0);
@@ -61,8 +58,7 @@ void forest_fire(A_Network *S, A_Network *X, int k, vector<Edge> *missing)
     {
       break;
     }
-    seed_node = nodeQueue.front();
-    
+    seed_node = nodeQueue.front();//getting the front node of the burned nodes
   }
 }
 

@@ -1,0 +1,29 @@
+Jazz
+
+Threshold = 8
+
+Precision: 0.8
+Recall 0.019333
+F1 value: 0.0377537
+
+Precision: 0.9375
+Recall 0.0141643
+F1 value: 0.027907
+
+Precision: 0.8
+Recall 0.0247973
+F1 value: 0.0481036
+
+Precision: 0.875
+Recall 0.0270662
+F1 value: 0.0525082
+
+Precision: 0.875
+Recall 0.0237288
+F1 value: 0.0462046
+
+Threshold = 9
+Precision: 0.852941
+Recall 0.0141463
+F1 value: 0.0278311
+
