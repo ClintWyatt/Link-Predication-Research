@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     cout << "running katz"<<endl;
     katz(&S, &missing, "XSN");
     */
-    threshold = 9;
+    threshold = 6;
     missing.clear();//clearing the array for actual missing edges 
     sampleMissing.clear();//clearing the array representing the predicted missing edges
     k = totalEdges(&X);//getting the total edges in the origional graph, which will be used for the forestfire algorithm
@@ -147,32 +147,33 @@ int main(int argc, char *argv[])
 
     /*computing the metrics for CN, RA, AA, and katz */
     writeMissing(&missing, &sampleMissing, "FF");//writing the missing edges and smaple missing edges to text files
+
+    cout << "Running metrics for common neighbors"<<endl; 
     intScores = commonNeighbors(&sampleMissing, &S, "FF-cn.txt", predictedEdges, threshold);//1 is a threshold and all scores >=1 will be written to the predictedEdges array
+    cout << "here"<<endl;
     k = getIndex(intScores, predictedEdges, threshold);//Gets the size up to the threshold for common neighbors. k will be used for katz, AA, and RA.
-    cout << k << endl;
-    writePredictedCn(predictedEdges, "FF-CN");
-    cout << "Running metrics for common neighbors"<<endl;   
+    writePredicted(predictedEdges, "FF-CN");  
     threeMetrics(predictedEdges, missing, "FF-cn");//calculating the recall, percision, and f1 value
     predictedEdges.clear();//clearing the predictedEdges array to be used for AA
     
-    AA(&sampleMissing, _predictedEdges, &S);
-    setPredictedEdges(_predictedEdges, k, threshold);
-    writePredicted(_predictedEdges, "FF-AA");
     cout << "Running metrics for AA"<< endl;
+    AA(&sampleMissing, _predictedEdges, &S);
+    setPredictedEdges(_predictedEdges, k);
+    writePredicted(_predictedEdges, "FF-AA");
     threeMetrics(_predictedEdges, missing, "FF-AA");
     _predictedEdges.clear();
 
-    katz(&S, &sampleMissing, _predictedEdges, "FF-katz");
-    setPredictedEdges(_predictedEdges, k, threshold);
-    writePredicted(_predictedEdges, "FF-katz");
     cout <<"Running metrics for katz"<<endl;
+    katz(&S, &sampleMissing, _predictedEdges, "FF-katz");
+    setPredictedEdges(_predictedEdges, k);
+    writePredicted(_predictedEdges, "FF-katz");
     threeMetrics(_predictedEdges, missing, "FF-katz");
     _predictedEdges.clear();
 
-    RA(&sampleMissing, _predictedEdges, &S);
-    setPredictedEdges(_predictedEdges, k, threshold);
-    writePredicted(_predictedEdges, "FF-RA");
     cout <<"Running metrics for RA" << endl;
+    RA(&sampleMissing, _predictedEdges, &S);
+    setPredictedEdges(_predictedEdges, k);
+    writePredicted(_predictedEdges, "FF-RA");
     threeMetrics(_predictedEdges, missing, "FF-RA");
     return 0;   
 }

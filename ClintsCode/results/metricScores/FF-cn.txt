@@ -1,29 +1,48 @@
-Jazz
 
-Threshold = 8
 
-Precision: 0.8
-Recall 0.019333
-F1 value: 0.0377537
+Precision: 0.788235
+Recall 0.0304407
+F1Value: 0.0586177
 
-Precision: 0.9375
-Recall 0.0141643
-F1 value: 0.027907
+Precision: 0.848485
+Recall 0.0125786
+F1Value: 0.0247897
 
-Precision: 0.8
-Recall 0.0247973
-F1 value: 0.0481036
+Precision: 0.888889
+Recall 0.0254777
+F1Value: 0.0495356
 
-Precision: 0.875
-Recall 0.0270662
-F1 value: 0.0525082
 
-Precision: 0.875
-Recall 0.0237288
-F1 value: 0.0462046
 
-Threshold = 9
-Precision: 0.852941
-Recall 0.0141463
-F1 value: 0.0278311
+Precision: 0.84
+Recall 0.0193192
+F1Value: 0.0377698
+
+Precision: 0.8125
+Recall 0.0116749
+F1Value: 0.023019
+
+Precision: 0.842105
+Recall 0.0145388
+F1Value: 0.0285842
+
+Precision: 0.896552
+Recall 0.0118721
+F1Value: 0.023434
+
+Precision: 0.775862
+Recall 0.0205761
+F1Value: 0.0400891
+
+Precision: 0.857143
+Recall 0.0108992
+F1Value: 0.0215247
+
+Precision: 0.793103
+Recall 0.0103978
+F1Value: 0.0205266
+
+Precision: 0.85
+Recall 0.0153777
+F1Value: 0.0302088
 

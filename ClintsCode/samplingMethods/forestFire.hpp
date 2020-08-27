@@ -7,7 +7,7 @@ void forest_fire(A_Network *S, A_Network *X, int k, vector<Edge> *missing)
   //Initialize random seed
   srand(time(NULL));
 
-  int pf = 60, pb;
+  int pf = 70, pb;
   int seed_node; 
   int rando, S_edges = 0;
   queue<int> nodeQueue;

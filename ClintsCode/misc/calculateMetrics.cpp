@@ -20,7 +20,7 @@ int main(int args, char * argv[])
 
     regex p ("Precision:");
     regex r ("Recall");
-    regex f ("F1Value");
+    regex f ("F1Value:");
     vector<float> precisionAverage;
     vector<float> recallAverage;
     vector<float> f1Average;

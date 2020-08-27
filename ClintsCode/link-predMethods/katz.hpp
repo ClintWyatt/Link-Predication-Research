@@ -3,8 +3,13 @@
 
 using namespace std;
 
-//use vector<int> * commonNeighbors as one of the arguments if the common neigbbors for path length of 2 need to not be checked
 //If a neighbor of node1 is adjacent to a neighbor of node2, then there is a pathlength of 3
+//node1Neighbors and node2Neighbors are bit vectors
+/*
+    Here, when we find a neighbor of node1, we go through the neighbor's row in the adjacency list to see if
+    there is an edge to a neighbor of node2: node2Neighbors->at(X->at(i).ListW[j].first) == 1 is refering to a neighbor
+    of node 2 who is in the adjacency list for the neighbor of node 1. Must be aware that 
+*/ 
 int pathLength3(vector<int> *node1Neighbors, vector<int> *node2Neighbors, Edge missing, A_Network *X)
 {
     int count =0;//represents the number of paths that are length of 3
@@ -14,10 +19,10 @@ int pathLength3(vector<int> *node1Neighbors, vector<int> *node2Neighbors, Edge m
         if(node1Neighbors->at(i) == 1)//if the neighbor exists for node1
         {
             //cout << i << endl;
-            for(int j =0; j < X->at(i).ListW.size(); j++)//Going through the adjacent nodes of the neighbor node for node1
+            for(int j =0; j < X->at(i).ListW.size(); j++)//Going through list for the neighbor(at index i) of node1
             {   
-                if(node2Neighbors->at(X->at(i).ListW[j].first) == 1 && X->at(i).ListW[j].first != missing.node2)//if a neighbor of node 2 is adjacent to a neighbor of node1
-                //(the neighbor from node2 is in the list of the neighbor from node1) and the node being checked is not node 2
+                if(node2Neighbors->at(X->at(i).ListW[j].first) == 1 && X->at(i).ListW[j].first != missing.node2)//node2Neighbors->at(X->at(i).ListW[j].first)
+                //refers to a neighbor of node2 that has an edge to the neighbor(at index i) of node1
                 {
                     count++;
                     //adding the locations of the nodes with a common neighbor for the copy arrays, which will help in getting neighbors farther out
@@ -32,7 +37,7 @@ int pathLength3(vector<int> *node1Neighbors, vector<int> *node2Neighbors, Edge m
     int index;//used to get the value of the node on a path of 3 between node1 and node2
 
     /*
-      Need to get the neighbors of the neighbors from node1. Then all possible paths of 4 will be found.
+      Need to get the adjacent nodes of the neighbors from node1. Then all possible paths of 4 will be found.
       Duplicate nodes in a path may be possible since katz consideres all possible paths
     */
     for(int i =0; i < node1Copy.size(); i++)//going through the nodes adjacent to node1 that produced a path of 3 to node 2
@@ -122,6 +127,6 @@ void katz(A_Network *X, vector<Edge> *missing, vector<float_string> & predictedE
     //insertionSort(&predictedEdges);//sorting the scores using insertion sort
     quicksort(predictedEdges, 0, predictedEdges.size() -1);
 
-    cout <<"last index for katz: " << predictedEdges[predictedEdges.size()-1].first << endl;
+    
 }
 #endif

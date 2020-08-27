@@ -37,7 +37,7 @@ void threeMetrics(vector<myType> &predictedEdges, vector<Edge> &missing, string 
     recall = float(ce) / float(oe);
     metrics << "Precision: "<< precision <<endl;
     metrics << "Recall " <<recall <<endl;
-    metrics << "F1 value: "<<f1Value(precision, recall) <<endl;
+    metrics << "F1Value: "<<f1Value(precision, recall) <<endl;
     metrics <<endl;
     metrics.close();
 }

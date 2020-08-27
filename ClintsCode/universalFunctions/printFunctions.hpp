@@ -77,8 +77,7 @@ void writePredicted(vector<myType> & predictedMissing, string alg)
 {
 
     ofstream output("results/predicated/" + alg + ".txt");//directory and the type of algorithm for writing to a file
-    cout << "not cn " << predictedMissing[predictedMissing.size()-1].first <<endl;
-    for(int i = 0; i < predictedMissing.size() -1; i++)
+    for(int i = 0; i < predictedMissing.size(); i++)
     {
         output << predictedMissing[i].first << " " << predictedMissing[i].second << endl;
 
@@ -86,6 +85,7 @@ void writePredicted(vector<myType> & predictedMissing, string alg)
     output.close();
 }
 
+/*
 template <class myType>
 void writePredictedCn(vector<myType> & predictedMissing, string alg)
 {
@@ -99,5 +99,5 @@ void writePredictedCn(vector<myType> & predictedMissing, string alg)
     }
     output.close();
 }
-
+*/
 #endif

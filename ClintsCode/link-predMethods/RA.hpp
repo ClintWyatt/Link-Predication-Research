@@ -37,7 +37,7 @@ void RA(vector<Edge> *missing, vector<float_string> & predictedMissing, A_Networ
         predictedMissing.push_back(index);
         scores.push_back(score);
     }
-    quicksort(predictedMissing, 0, predictedMissing.size()-1);
+    quicksort(predictedMissing, 0, predictedMissing.size()-1);//sorting all the scores to make implementing the threshold easier
     //insertionSort(&predictedMissing);
 }
 

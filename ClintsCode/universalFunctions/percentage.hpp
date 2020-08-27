@@ -5,6 +5,7 @@ using namespace std;
 
 int getIndex(vector<int> &scores, vector<int_string> &predictedEdges, int threshold)
 {
+
    int indexCount = 0;
    for(int i = predictedEdges.size() -1; i > -1; i--)
    {
@@ -12,13 +13,23 @@ int getIndex(vector<int> &scores, vector<int_string> &predictedEdges, int thresh
        else{break;}//break the loop
    }
    return indexCount;
+   
+    /*
+    int indexCount =0; 
+    for(int i =0; i < predictedEdges.size(); i++)
+    {
+        if(predictedEdges[i].first < threshold){indexCount++;}
+        else{break;}
+    }
+    return indexCount;
+    */
 }
 
 //method will be used to get the same predicted edges size of values for AA, RA, and katz as common neighbors
 
-void setPredictedEdges(vector<float_string> & predictedEdges, int index, int threshold)
+void setPredictedEdges(vector<float_string> & predictedEdges, int index)
 {
-    if(threshold > 0)//if the threshold is greater than zero
+    if(index >0 && index != predictedEdges.size())//if the threshold is not the lowest value bin and is not greater than the highest bin
     {
         vector<float_string> finalPredictedEdges;
         float_string _index;
