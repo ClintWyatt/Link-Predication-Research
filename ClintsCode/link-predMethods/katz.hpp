@@ -8,7 +8,7 @@ using namespace std;
 /*
     Here, when we find a neighbor of node1, we go through the neighbor's row in the adjacency list to see if
     there is an edge to a neighbor of node2: node2Neighbors->at(X->at(i).ListW[j].first) == 1 is refering to a neighbor
-    of node 2 who is in the adjacency list for the neighbor of node 1. Must be aware that 
+    of node 2 who is in the adjacency list for the neighbor of node 1.
 */ 
 int pathLength3(vector<int> *node1Neighbors, vector<int> *node2Neighbors, Edge missing, A_Network *X)
 {
@@ -27,7 +27,7 @@ int pathLength3(vector<int> *node1Neighbors, vector<int> *node2Neighbors, Edge m
                     count++;
                     //adding the locations of the nodes with a common neighbor for the copy arrays, which will help in getting neighbors farther out
                     node1Copy.push_back(i);
-                    node2Copy.push_back(X->at(i).ListW[j].first);
+                    //node2Copy.push_back(X->at(i).ListW[j].first);
                 }
             }
         }  
@@ -52,30 +52,49 @@ int pathLength3(vector<int> *node1Neighbors, vector<int> *node2Neighbors, Edge m
         }
     }
 
-    //cout <<"path 3 is " << count << endl;
+    cout <<"path 3 is " << count << endl;
     return count;
 }
 
-//not finsihed yet, but the logic will be similar to a path of 3
+//goes though each list of the neighbors of the adjacent neighbors for node 1. If the nodes are the same, path 4 exists. 
 int pathLength4(vector<int> *node1Neighbors, vector<int> *node2Neighbors, Edge missing, A_Network *X)
 {
-    int score =0;
-
-    return score;
+    int count =0;//represents the number of paths that are length of 3
+    vector<int> node1Copy, node2Copy;//used to store the neighbors of node1 and node2 that are adjacent of each other
+    for(int i =0; i < node1Neighbors->size(); i++)//looping through neighbor 1's bit vector
+    {
+        if(node1Neighbors->at(i) == 1)//if the neighbor exists for node1
+        {
+            //cout << i << endl;
+            for(int j =0; j < X->at(i).ListW.size(); j++)//Going through list for the neighbor(at index i) of node1
+            {   
+                if(node2Neighbors->at(X->at(i).ListW[j].first) == 1 && X->at(i).ListW[j].first != missing.node2)//node2Neighbors->at(X->at(i).ListW[j].first)
+                //refers to a neighbor of node2 that has an edge to the neighbor(at index i) of node1
+                {
+                    count++;
+                    //adding the locations of the nodes with a common neighbor for the copy arrays, which will help in getting neighbors farther out
+                    //node1Copy.push_back(i);
+                    //node2Copy.push_back(X->at(i).ListW[j].first);
+                }
+            }
+        }  
+    }
+    cout << "path length 4 " << count << endl;
+    return count;
 }
 
 
-void katz(A_Network *X, vector<Edge> *missing, vector<float_string> & predictedEdges, string alg)
+void katz(A_Network *X, vector<Edge> *missing, vector<double_string> & predictedEdges, string alg)
 {
     vector<int> node1Neighbors;//represents nodes that are on a path for node1. Gets updated every time we go a path futher (n + 1).
     vector<int> node2Neighbors;//represents the nodes that are adjacent to node2. Used for path of 3
-    float score;//represetns the score for the missing edges
+    double score;//represetns the score for the missing edges
     string edge; //represents the 
-    float_string index;
+    double_string index;
     int n1, n2, commonCount;//n1 and n2 are indexes in the lists of node1 and node2 of the missing edge. Commoncount represents the number of paths for lengths of 1, 2, and 3.
     for(int i =0; i < missing->size(); i++)
     {
-        //cout <<"missing edge: " << missing->at(i).node1 << " " << missing->at(i).node2 << endl;
+        cout <<"missing edge: " << missing->at(i).node1 << " " << missing->at(i).node2 << endl;
         score = 0.0;//resetting the score for the current missing edge
         node1Neighbors.clear();//clearing the previous neighbors for the last node1 (part of the previous missing edge)
         node2Neighbors.clear();//clearing the previous neighbors for the last node2 (part of the previous missing edge)
@@ -119,6 +138,7 @@ void katz(A_Network *X, vector<Edge> *missing, vector<float_string> & predictedE
         score += pow(0.05, 2) * commonCount;
         //pathlength of 3
         score += pow(0.05, 3) * pathLength3(&node1Neighbors, &node2Neighbors, missing->at(i), X);
+        score += pow(0.05, 4) * pathLength4(&node1Neighbors, &node2Neighbors, missing->at(i), X);
         index.first = score;
         edge = to_string(missing->at(i).node1) + " " + to_string(missing->at(i).node2);
         index.second = edge;

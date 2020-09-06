@@ -3,11 +3,11 @@
 
 
 
-vector<float> AA(vector<Edge> *missing, vector<float_string> & predictedMissing, A_Network *X)
+vector<float> AA(vector<Edge> *missing, vector<double_string> & predictedMissing, A_Network *X)
 {
     float score;//represents the score of edge
     vector<float> AAscores;//represents AA scores
-    float_string index; //used to add elements to the predictedMissing array
+    double_string index; //used to add elements to the predictedMissing array
     string edge; //used to represent the edge of the score
     int n1, n2, k, l, cn;//k and l represent the indexes for the neighbors for node1 and node2. cn represents the common neighbors
     for(int i = 0; i < missing->size(); i++)

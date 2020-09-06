@@ -40,7 +40,7 @@ void insertionSort(vector<myType> *scores){
 }
 
 /*
-void insertionSort(vector<float_string> *scores){
+void insertionSort(vector<double_string> *scores){
     int i, j;
     float key;
     string str;  
@@ -58,9 +58,9 @@ void insertionSort(vector<float_string> *scores){
 }
 */
 /*quicksort algorithm
-Although we are using a template, only use the pair vectors for quicksort (int_string, float_string, int_double, etc). Will not work for a single data type
+Although we are using a template, only use the pair vectors for quicksort (int_string, double_string, int_double, etc). Will not work for a single data type
 */
-const float_string & median3(vector<float_string> & a, int left, int right)
+const double_string & median3(vector<double_string> & a, int left, int right)
 {
 	 int center = (left + right) / 2;
 	
@@ -77,7 +77,7 @@ const float_string & median3(vector<float_string> & a, int left, int right)
 }
 
 
-void insertionsort(vector<float_string> & a, int left, int right)
+void insertionsort(vector<double_string> & a, int left, int right)
 {
 	//insertion sort is slightly different than the normal insertionsort. p = left is the main difference
 	//as well as the right +1
@@ -96,11 +96,11 @@ void insertionsort(vector<float_string> & a, int left, int right)
 	}
 }
 
-void quicksort(vector<float_string> & a, int left, int right)
+void quicksort(vector<double_string> & a, int left, int right)
 {
 	if (left + 10 <= right)
 	{
-		float_string pivot = median3(a, left, right);
+		double_string pivot = median3(a, left, right);
 		int center = (left + right) / 2;
 		// Begin partitioning
 		int i = left, j = right - 1;

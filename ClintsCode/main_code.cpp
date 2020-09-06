@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
     int threshold;     
     float percentage;//used to get the percentage of bins used the same for common neighbors, AA, katz, and RA
     vector<int_string> predictedEdges;//used for the predicted edges for common neighbors
-    vector<float_string> _predictedEdges;//used for the predicted edges for AA, RA, and katz
+    vector<double_string> _predictedEdges;//used for the predicted edges for AA, RA, and katz
     vector<int> intScores;//represents the total number of scores for the common neighbors algorithm        
     vector<float> floatScores; //represents the scores from the link prediction algorithms such as common neighbors, AA, Kantz, etc.
     vector<Edge> sampleMissing; //represents the missing edges for the sample network against itself. Represent the predicted edges. 
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     cout << "running katz"<<endl;
     katz(&S, &missing, "XSN");
     */
-    threshold = 6;
+    threshold = 1;
     missing.clear();//clearing the array for actual missing edges 
     sampleMissing.clear();//clearing the array representing the predicted missing edges
     k = totalEdges(&X);//getting the total edges in the origional graph, which will be used for the forestfire algorithm
@@ -150,7 +150,6 @@ int main(int argc, char *argv[])
 
     cout << "Running metrics for common neighbors"<<endl; 
     intScores = commonNeighbors(&sampleMissing, &S, "FF-cn.txt", predictedEdges, threshold);//1 is a threshold and all scores >=1 will be written to the predictedEdges array
-    cout << "here"<<endl;
     k = getIndex(intScores, predictedEdges, threshold);//Gets the size up to the threshold for common neighbors. k will be used for katz, AA, and RA.
     writePredicted(predictedEdges, "FF-CN");  
     threeMetrics(predictedEdges, missing, "FF-cn");//calculating the recall, percision, and f1 value
