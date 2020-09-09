@@ -17,7 +17,7 @@ int main(int args, char * argv[])
     fstream input;
     stringstream linestream;
     input.open(argv[1], fstream::in);//specifying the 
-
+    if(!input){cout <<"ERROR: file does not exist" <<endl; return -1;}
     regex p ("Precision:");
     regex r ("Recall");
     regex f ("F1Value:");

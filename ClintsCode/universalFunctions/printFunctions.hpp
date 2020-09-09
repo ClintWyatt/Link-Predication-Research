@@ -19,7 +19,6 @@ void writeBothNetworks(A_Network *X, A_Network *S, string alg)
 {
     ofstream origional("networks/origional.txt");
     ofstream sample(alg+"_sample.txt");
-
     for(int i =0; i < X->size(); i++)
     {
         origional << X->at(i).Row << ": ";

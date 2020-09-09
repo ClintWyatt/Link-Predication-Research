@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
         /******* Read Graph (GUI) and Create Reverse Map*****************/
         //Obtain the list of edges.
         q = clock();
-        readin_network(&X, argv[3], nodes);//from input_to_network.hpp
+        readin_network(&X, argv[3], nodes);//from Core/basic_io/format/input/level2/input_to_network.hpp
 
         //Create Reversemap
 
@@ -101,7 +101,14 @@ int main(int argc, char *argv[])
         cout << "Total Time for Reading Network: " << ((float)q) / CLOCKS_PER_SEC << "\n";
         /**** Read Graph (GUI) ***********/
     }
-   
+    /*
+    for(int i =0; i < X.size(); i++)
+    {
+        cout << i << ": ";
+        for(int j =0; j < X[i].ListW.size(); j++){cout<<X[i].ListW[j].first<<" ";}
+        cout << endl;
+    }
+    */
     set_opposite_index(&X);
     //print_detail(X);
     //print_edgelist(X);
@@ -130,7 +137,7 @@ int main(int argc, char *argv[])
     writeMissing(&missing, &sampleMissing, "xsn");//writing the actual missing edges and predicted missing edges to text files
     /*cout << "running common neighbors" << endl;
     commonNeighbors(&sampleMissing, &S, "xsn-cn.txt");
-
+    
     cout <<"running AA" <<endl;
     AA(&missing, "xsn", &S);
     cout << "running katz"<<endl;

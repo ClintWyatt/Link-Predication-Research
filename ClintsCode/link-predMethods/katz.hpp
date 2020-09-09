@@ -52,7 +52,7 @@ int pathLength3(vector<int> *node1Neighbors, vector<int> *node2Neighbors, Edge m
         }
     }
 
-    cout <<"path 3 is " << count << endl;
+    //cout <<"path 3 is " << count << endl;
     return count;
 }
 
@@ -79,7 +79,7 @@ int pathLength4(vector<int> *node1Neighbors, vector<int> *node2Neighbors, Edge m
             }
         }  
     }
-    cout << "path length 4 " << count << endl;
+    //cout << "path length 4 " << count << endl;
     return count;
 }
 
@@ -94,7 +94,7 @@ void katz(A_Network *X, vector<Edge> *missing, vector<double_string> & predicted
     int n1, n2, commonCount;//n1 and n2 are indexes in the lists of node1 and node2 of the missing edge. Commoncount represents the number of paths for lengths of 1, 2, and 3.
     for(int i =0; i < missing->size(); i++)
     {
-        cout <<"missing edge: " << missing->at(i).node1 << " " << missing->at(i).node2 << endl;
+        //cout <<"missing edge: " << missing->at(i).node1 << " " << missing->at(i).node2 << endl;
         score = 0.0;//resetting the score for the current missing edge
         node1Neighbors.clear();//clearing the previous neighbors for the last node1 (part of the previous missing edge)
         node2Neighbors.clear();//clearing the previous neighbors for the last node2 (part of the previous missing edge)

@@ -20,11 +20,13 @@ void forest_fire(A_Network *S, A_Network *X, int k, vector<Edge> *missing)
   S->resize(X->size());
 
   visited.clear();
-  visited.resize(X->size(), false);
+  visited.resize(X->size());
+
+  for(int i =0; i < X->size(); i++){visited[i] = false;}
 
   //Pick random seed node
   seed_node = rand() % S->size();
-    
+  //seed_node = 23;
   //Initial queue 
   nodeQueue.push(seed_node);
   visited.at(seed_node) = true;
@@ -59,6 +61,7 @@ void forest_fire(A_Network *S, A_Network *X, int k, vector<Edge> *missing)
       break;
     }
     seed_node = nodeQueue.front();//getting the front node of the burned nodes
+    //if(seed_node == 23){cout <<"true"<<endl;}
   }
 }
 
