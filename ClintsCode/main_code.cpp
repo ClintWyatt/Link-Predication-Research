@@ -148,7 +148,9 @@ int main(int argc, char *argv[])
     sampleMissing.clear();//clearing the array representing the predicted missing edges
     k = totalEdges(&X);//getting the total edges in the origional graph, which will be used for the forestfire algorithm
     forest_fire(&S, &X, k, &missing);//forestfire algorithm
-    missingEdges(&X, &S, &missing);//getting the real missing edges that are in the originla graph but not the sample graph
+    k = totalEdges(&S);
+    cout << "Total edges in the sample graph: " << k <<endl;
+    missingEdges(&X, &S, &missing);//getting the real missing edges that are in the origional graph but not the sample graph
     writeSample(&S, "FF");//writing the sample network from the forestfire algorithm
     missingSample(&S, &sampleMissing);//getting the missing edges in the sample against itself
 

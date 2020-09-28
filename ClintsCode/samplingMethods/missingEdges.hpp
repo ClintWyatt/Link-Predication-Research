@@ -77,7 +77,7 @@ void missingSample(A_Network *S, vector<Edge> *missing)
     {
       for(int k =0; k < S->at(j).ListW.size(); k++)//going through an individual row that is below 
       {
-        if(S->at(j).ListW[k].first == i)//if the node in j row of the S network is the same as i (an edge is between the node in the list for the sample's row and i)
+        if(S->at(j).ListW[k].first == i)//if the node in j's row of the S network is the same as i (an edge is between the node in the list for the sample's row and i)
         {
           found = true;
           break;//go to the next row since an edge exists between i and a node in the current row
