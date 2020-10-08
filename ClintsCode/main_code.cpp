@@ -148,7 +148,9 @@ int main(int argc, char *argv[])
     sampleMissing.clear();//clearing the array representing the predicted missing edges
     k = totalEdges(&X);//getting the total edges in the origional graph, which will be used for the forestfire algorithm
     forest_fire(&S, &X, k, &missing);//forestfire algorithm
-    k = totalEdges(&S);
+    k = totalEdges(&S);//getting the total edges in the sample graph. This was used to see if there was a relationship between the number of edges and the f1 score of
+    //all link predication algorithms
+    writeSampleGraph(S);
     cout << "Total edges in the sample graph: " << k <<endl;
     missingEdges(&X, &S, &missing);//getting the real missing edges that are in the origional graph but not the sample graph
     writeSample(&S, "FF");//writing the sample network from the forestfire algorithm
@@ -158,7 +160,7 @@ int main(int argc, char *argv[])
     writeMissing(&missing, &sampleMissing, "FF");//writing the missing edges and smaple missing edges to text files
 
     cout << "Running metrics for common neighbors"<<endl; 
-    intScores = commonNeighbors(&sampleMissing, &S, "FF-cn.txt", predictedEdges, threshold);//1 is a threshold and all scores >=1 will be written to the predictedEdges array
+    intScores = commonNeighbors(&sampleMissing, &S, "FF-cn.txt", predictedEdges, threshold);//n is a threshold and all scores >=n will be written to the predictedEdges array
     k = getIndex(intScores, predictedEdges, threshold);//Gets the size up to the threshold for common neighbors. k will be used for katz, AA, and RA.
     writePredicted(predictedEdges, "FF-CN");  
     threeMetrics(predictedEdges, missing, "FF-cn");//calculating the recall, percision, and f1 value

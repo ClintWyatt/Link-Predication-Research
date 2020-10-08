@@ -84,6 +84,18 @@ void writePredicted(vector<myType> & predictedMissing, string alg)
     output.close();
 }
 
+void writeSampleGraph(A_Network & S)
+{
+    ofstream output("networks/sampleEdges.txt");
+    for(int i =0; i < S.size(); i++)
+    {
+        for(int j =0; j < S[i].ListW.size(); j++)
+        {
+            output << i << " " << S[i].ListW[j].first << endl;
+        }
+    }
+
+}
 /*
 template <class myType>
 void writePredictedCn(vector<myType> & predictedMissing, string alg)

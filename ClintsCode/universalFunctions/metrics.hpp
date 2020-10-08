@@ -20,10 +20,10 @@ void threeMetrics(vector<myType> &predictedEdges, vector<Edge> &missing, string 
     //cout << predictedEdges.size() << endl;
     for(int i =0; i < missing.size(); i++)
     {
-        edge += to_string(missing[i].node1) + " " + to_string(missing[i].node2);
+        edge += to_string(missing[i].node1) + " " + to_string(missing[i].node2);//represents the true missing edge
         for(int j =0; j < predictedEdges.size(); j++)
         {
-            if(edge == predictedEdges[j].second)//if the 
+            if(edge == predictedEdges[j].second)//if the predicted missing edge is the same as the true missing edge
             {
                 ce++;
                 results << edge << endl;
