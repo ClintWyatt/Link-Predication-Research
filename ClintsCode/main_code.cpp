@@ -128,6 +128,7 @@ int main(int argc, char *argv[])
     A_Network S;           //sample network. Network_defs.hpp
     
     k = X.size() / 20; //sample network size
+    
     cout <<"running snowball" <<endl;
     removeDuplicateEdges(X);//removing duplicate edges if they exist
     snowball(&X, &S, k, &missing);//snowball algorithm
@@ -135,6 +136,7 @@ int main(int argc, char *argv[])
     writeBothNetworks(&X, &S, "networks/XSN");//writing networks X and S to output files
     missingSample(&S, &sampleMissing);//getting the edges that are missing in the sample against the sample graph
     writeMissing(&missing, &sampleMissing, "xsn");//writing the actual missing edges and predicted missing edges to text files
+    
     /*cout << "running common neighbors" << endl;
     commonNeighbors(&sampleMissing, &S, "xsn-cn.txt");
     
@@ -143,14 +145,16 @@ int main(int argc, char *argv[])
     cout << "running katz"<<endl;
     katz(&S, &missing, "XSN");
     */
+    removeDuplicateEdges(X);
     threshold = 1;
     missing.clear();//clearing the array for actual missing edges 
     sampleMissing.clear();//clearing the array representing the predicted missing edges
+    S.clear();
     k = totalEdges(&X);//getting the total edges in the origional graph, which will be used for the forestfire algorithm
     forest_fire(&S, &X, k, &missing);//forestfire algorithm
     k = totalEdges(&S);//getting the total edges in the sample graph. This was used to see if there was a relationship between the number of edges and the f1 score of
     //all link predication algorithms
-    writeSampleGraph(S);
+    writeSampleGraph(S);//writing the sample graph edges to a text file
     cout << "Total edges in the sample graph: " << k <<endl;
     missingEdges(&X, &S, &missing);//getting the real missing edges that are in the origional graph but not the sample graph
     writeSample(&S, "FF");//writing the sample network from the forestfire algorithm

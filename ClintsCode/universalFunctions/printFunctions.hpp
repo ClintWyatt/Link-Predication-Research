@@ -96,6 +96,18 @@ void writeSampleGraph(A_Network & S)
     }
 
 }
+
+void writeEdges(A_Network & S)
+{
+    ofstream output("networks/sampleEdgeList.txt");//opening a file for writing. Will create it if it doesnt exist
+    for(int i =0; i < S.size(); i++)
+    {
+        for(int j =0; j < S[i].ListW.size(); j++)
+        {
+            output << S[i].ListW[j].first << " " << S[i].ListW[j].second <<endl;
+        }
+    }
+}
 /*
 template <class myType>
 void writePredictedCn(vector<myType> & predictedMissing, string alg)
