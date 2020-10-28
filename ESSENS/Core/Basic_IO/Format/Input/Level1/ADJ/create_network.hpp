@@ -21,7 +21,7 @@ void create_Network(vector<Edge> *b, int bf_size, A_Network *X, int Ns)
 	 int_double colvals;
 	 int current_node=-1;
 
-	 
+
 	 //Read Through the list of edges	 
 	 for(int i=0;i<b->size();i++)
      {
@@ -30,7 +30,7 @@ void create_Network(vector<Edge> *b, int bf_size, A_Network *X, int Ns)
 		 int node2=b->at(i).node2;
 		 double edge_wt=b->at(i).edge_wt;
 		
-        // printf("%d %d \n", node1, node2);
+        //printf("%d %d \n", node1, node2);
          //Initailize and Add Row
 		 if(current_node!=node1)
          {
@@ -63,7 +63,7 @@ void create_Network(vector<Edge> *b, int bf_size, A_Network *X, int Ns)
 		 AList.ListW.push_back(colvals);
 		 
 	 } //end of for
-	 
+
 	 //Clear edgelist
 	 b->clear();
 	 
@@ -87,7 +87,6 @@ void create_Network(vector<Edge> *b, int bf_size, A_Network *X, int Ns)
 		 	current_node++;
 	 	}
 	 }
-	 
 	 return;
 	 
  }

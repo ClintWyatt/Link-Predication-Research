@@ -74,6 +74,18 @@ void node_node_wt(char *file, char* gfile, char* mapfile)
 			if(!check_int(wt) && !check_double(wt)) //If it is string--raise exception 
 			{ exception_weight_string(); break;}
             
+			myedge.node1 = stoi(st1);
+			myedge.node2 = stoi(st2);
+			myedge.edge_wt = atof(wt.c_str());
+			myEdges.push_back(myedge);
+
+			//add the other edge
+			myedge.node1 = stoi(st2);
+			myedge.node2 = stoi(st1);
+			myedge.edge_wt = atof(wt.c_str());
+			myEdges.push_back(myedge);
+			
+			
             myedge.node1=nodemap.find(st1)->second;
             myedge.node2=nodemap.find(st2)->second;
             myedge.edge_wt=atof(wt.c_str());
@@ -84,7 +96,7 @@ void node_node_wt(char *file, char* gfile, char* mapfile)
             myedge.node2=nodemap.find(st1)->second;
             myedge.edge_wt=atof(wt.c_str());
             myEdges.push_back(myedge);
-		
+			
     	}//end of if
 		
     } //end of reading file
@@ -105,12 +117,10 @@ void node_node_wt(char *file, char* gfile, char* mapfile)
 	myfile1.close();
 	//========= Done Activity 2 =============//
     
-    
     //Activity 3: Writes Edges in Ordered Form to New File
-    sort(&myEdges, inc_node1);//from unary_set_operations.hpp
+    sort(&myEdges, inc_node1);//from ../basic_setops/unary_set_operations.hpp, works
     //Run unique to remove duplicates
-    vector<Edge> thisEdges=unique(myEdges);
-    
+    vector<Edge> thisEdges=unique(myEdges);//works
     ofstream myfile;
     myfile.open (gfile, ios::trunc); //Open graph_file
     for(int x=0;x<thisEdges.size();x++)

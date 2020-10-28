@@ -45,7 +45,9 @@ Edge create (int n1, int n2, double wt)
 typedef pair<int, int> int_int;  /** /typedef pair of integers */
 typedef pair<int, double> int_double; /** /typedef pair of integer and double */
 typedef pair<double, int> double_int; /** /typedef pair of integer and double */
-
+typedef pair<int, string> int_string; /** typedef pair of integer and string */
+typedef pair<float, string> float_string; /** typedef pair of float and string */
+typedef pair<double, string> double_string;
 //template can take any data type
 template<class AnyType1, class AnyType2>
 pair<AnyType1, AnyType2> create (AnyType1 e1, AnyType2 e2)

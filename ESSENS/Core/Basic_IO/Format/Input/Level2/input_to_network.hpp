@@ -44,17 +44,19 @@ void readin_network(myNetworkType *X, char *file, int XtraN)
 		sscanf(line,"%d %d %lf",&n1,&n2,&myedge.edge_wt);
         myedge.node1=n1;
         myedge.node2=n2;
+        //cout << myedge.node1 << " " << myedge.node2 << endl;
         a.push_back(myedge);//having vector<edge> a pushing back the date from the output.txt file
         
         //printf("%d %d \n", n1, n2);
         
 	}//end of while
+
 	fclose(graph_file);
 
 
    // printf("done \n");
 	//Activity1: Creates specified network format
-	create_Network(&a, 0, X,XtraN);//from create_network.hpp in the adj folder
+	create_Network(&a, 0, X,XtraN);//from Core/Basic_IO/Format/Input/Level1/ADJ/create_network.hpp
 
 	return;
 }
