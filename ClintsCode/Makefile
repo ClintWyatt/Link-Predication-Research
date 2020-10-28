@@ -7,7 +7,8 @@ CXXFLAGS=-g -fopenmp
 
 #Change this line to a different location if needed
 #LOCAL_INDICES= -I /mnt/c/Users/Isaac\ Thomas/Documents/Link\ Predication\ Research/LinkPred/LocalIndices
-LOCAL_INDICES = -I /mnt/c/Users/tenor/Desktop/work/school/link-predication/Link-Predication-Research/ESSENS/ClintsCode
+#LOCAL_INDICES = -I /mnt/c/Users/tenor/Desktop/work/school/link-predication/Link-Predication-Research/ESSENS/ClintsCode
+LOCAL_INDICES = -I /mnt/c/Users/tenor/Desktop/work/school/link-predication/Link-Predication-Research/ClintsCode
 #Including BASIC_IO
 BASIC_IO= $(ESSENS)/Core/Basic_IO
 
