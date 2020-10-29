@@ -42,6 +42,42 @@ void threeMetrics(vector<myType> &predictedEdges, vector<Edge> &missing, string 
     metrics.close();
 }
 
+template <class myType>
+vector<float> threeMetrics(vector<myType> &predictedEdges, vector<Edge> &missing)
+{
+    int pe = predictedEdges.size(); //perdicted missing edges
+    int ce = 0; //correctly perdicted edges
+    int oe = missing.size();//oe represents the actual missing edges.
+    float precision;// ce divided by pe
+    float recall; // ce diviede by oe
+    float f1;
+    string edge;//used to represent the edge in for the real missing edges
+    //cout << predictedEdges.size() << endl;
+    for(int i =0; i < missing.size(); i++)
+    {
+        edge += to_string(missing[i].node1) + " " + to_string(missing[i].node2);//represents the true missing edge
+        for(int j =0; j < predictedEdges.size(); j++)
+        {
+            if(edge == predictedEdges[j].second)//if the predicted missing edge is the same as the true missing edge
+            {
+                ce++;
+                results << edge << endl;
+                break;
+            }
+        }
+        edge.clear();
+    }
+    results.close();
+    precision = float(ce) / float(pe);
+    recall = float(ce) / float(oe);
+    f1 = f1Value(precision, recall);
+    vector<float>results;
+    results.push_back(precision);
+    results.push_back(recall);
+    results.push_back(f1);
+    return results;
+}
+
 
 
 float f1Value(float precision, float recall)

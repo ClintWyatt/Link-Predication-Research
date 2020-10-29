@@ -1,16 +1,15 @@
 #Change this line to a different location if needed
 #ESSENS=/mnt/c/Users/Isaac\ Thomas/Documents/Link\ Predication\ Research/LinkPred/ESSENS
-ESSENS=/mnt/c/Users/tenor/Desktop/work/school/link-predication/Link-Predication-Research/ESSENS
-
+ESSENS=/mnt/c/Users/tenor/Desktop/work/Link-Prediction-Research/ESSENS
+LOCAL=/mnt/c/Users/tenor/Desktop/work/Link-Prediction-Research/ClintsCode
 CXX=g++
-CXXFLAGS=-g -fopenmp 
-
-#Change this line to a different location if needed
-#LOCAL_INDICES= -I /mnt/c/Users/Isaac\ Thomas/Documents/Link\ Predication\ Research/LinkPred/LocalIndices
-#LOCAL_INDICES = -I /mnt/c/Users/tenor/Desktop/work/school/link-predication/Link-Predication-Research/ESSENS/ClintsCode
-LOCAL_INDICES = -I /mnt/c/Users/tenor/Desktop/work/school/link-predication/Link-Predication-Research/ClintsCode
+CXXFLAGS= -std=c++17 -g -fopenmp
 #Including BASIC_IO
 BASIC_IO= $(ESSENS)/Core/Basic_IO
+
+LINK=-I $(LOCAL)/link-predMethods \
+ -I $(LOCAL)/samplingMethods\
+ -I $(LOCAL)/universalFunctions
 
 BASIC_IO_PREPROCESS=$(BASIC_IO)/PreProcess
 
@@ -52,7 +51,7 @@ BASIC_ANALYSIS_INC=-I$(BASIC_ANALYSIS)/Level0
 
 #all means compile all
 all: 	main_code.cpp      
-	$(CXX) $(CXXFLAGS) $(LOCAL_INDICES) $(BASIC_IO_INC) $(BASIC_SETOP_INC) $(BASIC_TRAVERSAL_INC) $(BASIC_CHANGE_INC) $(BASIC_ANALYSIS_INC) main_code.cpp
+	$(CXX) $(CXXFLAGS) $(LINK) $(BASIC_IO_INC) $(BASIC_SETOP_INC) $(BASIC_TRAVERSAL_INC) $(BASIC_CHANGE_INC) $(BASIC_ANALYSIS_INC) main_code.cpp
 cE: 	create_edgelist.cpp
 	$(CXX) -g -o cE.out $(BASIC_IO_INC) $(BASIC_SETOP_INC) $(BASIC_TRAVERSAL_INC) $(BASIC_CHANGE_INC) $(BASIC_ANALYSIS_INC) create_edgelist.cpp
 sparse: sparsify.cpp

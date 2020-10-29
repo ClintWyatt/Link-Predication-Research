@@ -6,3 +6,23 @@ Precision: 0.226601
 Recall 0.140244
 F1Value: 0.173258
 
+Precision: 0.242775
+Recall 0.126506
+F1Value: 0.166337
+
+Precision: 0.245509
+Recall 0.127329
+F1Value: 0.167689
+
+Precision: 0.735516
+Recall 0.7008
+F1Value: 0.717739
+
+Precision: 0.622837
+Recall 0.59867
+F1Value: 0.610514
+
+Precision: 0.653266
+Recall 0.452962
+F1Value: 0.534979
+

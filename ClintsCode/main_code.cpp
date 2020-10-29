@@ -14,6 +14,7 @@
 
 //Link Prediction
 //No need to give directory since it is already linked::::SB
+
 #include "universalFunctions/totalEdges.hpp"
 #include "universalFunctions/metrics.hpp"
 #include "universalFunctions/percentage.hpp"
@@ -29,9 +30,13 @@
 #include "samplingMethods/randomEdge.hpp"
 #include "samplingMethods/randomEdge.hpp"
 #include "samplingMethods/forestFire.hpp"
+#include <filesystem>
+#include <string.h>
+#include <string_view>
 /*** All Headers Required From ESSENS **/
 
 using namespace std;
+void readManyFiles(char *output, char *map);
 
 int main(int argc, char *argv[])
 {
@@ -46,6 +51,11 @@ int main(int argc, char *argv[])
         cout << "INPUT ERROR:: At least 2 inputs required. First: filename \n Second: Filetypes: 1:node_node_wt 2:node_wt_node 3:node_node 4:node_node (Only option 1 is active now) \n Third: Name of new file \n Fourth: Name of Map file\n";
         return 0;
     }
+    if(argc == 3)//if we are trying to read all files in a directory
+    {
+        readManyFiles(argv[1], argv[2]);
+        return 0;
+    }
     //Check to see if file opening succeeded
     ifstream the_file(argv[1]);
     if (!the_file.is_open())
@@ -57,7 +67,6 @@ int main(int argc, char *argv[])
     A_Network X;//adjacency list. Template is from network_defs.hpp
     int nodes = -1;
     map_int_st revmap;
-
     //Proces File if Option Given by
     if (argc == 5)
     {
@@ -101,17 +110,9 @@ int main(int argc, char *argv[])
         cout << "Total Time for Reading Network: " << ((float)q) / CLOCKS_PER_SEC << "\n";
         /**** Read Graph (GUI) ***********/
     }
-    /*
-    for(int i =0; i < X.size(); i++)
-    {
-        cout << i << ": ";
-        for(int j =0; j < X[i].ListW.size(); j++){cout<<X[i].ListW[j].first<<" ";}
-        cout << endl;
-    }
-    */
+
     set_opposite_index(&X);
-    //print_detail(X);
-    //print_edgelist(X);
+\
     string alg; //represents the algorithm that is used for writing the sample network graphs
     int it = 1;
     int p;                  //percentage of edges removed
@@ -137,14 +138,6 @@ int main(int argc, char *argv[])
     missingSample(&S, &sampleMissing);//getting the edges that are missing in the sample against the sample graph
     writeMissing(&missing, &sampleMissing, "xsn");//writing the actual missing edges and predicted missing edges to text files
     
-    /*cout << "running common neighbors" << endl;
-    commonNeighbors(&sampleMissing, &S, "xsn-cn.txt");
-    
-    cout <<"running AA" <<endl;
-    AA(&missing, "xsn", &S);
-    cout << "running katz"<<endl;
-    katz(&S, &missing, "XSN");
-    */
     removeDuplicateEdges(X);
     threshold = 1;
     missing.clear();//clearing the array for actual missing edges 
@@ -190,4 +183,76 @@ int main(int argc, char *argv[])
     writePredicted(_predictedEdges, "FF-RA");
     threeMetrics(_predictedEdges, missing, "FF-RA");
     return 0;   
+}
+
+void readManyFiles(char *output, char *map)
+{
+    vector<int_string> predictedEdges;//used for the predicted edges for common neighbors
+    vector<double_string> _predictedEdges;//used for the predicted edges for AA, RA, and katz
+    vector<int> intScores;//represents the total number of scores for the common neighbors algorithm        
+    vector<float> floatScores; //represents the scores from the link prediction algorithms such as common neighbors, AA, Kantz, etc.
+    vector<Edge> sampleMissing; //represents the missing edges for the sample network against itself. Represent the predicted edges. 
+    vector<Edge> missing; //array representing missing edges that are in the origional network, but not the sample network
+    namespace fs = std::filesystem;
+    A_Network X, S;//sample and origional network
+    int nodes;
+    map_int_st revmap;
+    clock_t q, q1, q2, t;
+    int n, k, threshold = 1; 
+    char buffer[200];//used to get the name of the file
+    string path = "../test_networks/other";//path for the files to be read in
+    bzero(buffer, 200);//zeroing out the buffer
+
+    for(const auto & entry : fs::directory_iterator(path))//going through each file in the directory
+    {
+        nodes = -1;
+        //cout << entry.path() << endl;
+        string path_string(entry.path());//using the string contructor to convert the path into a string
+        n = path_string.length();//getting the length of the string
+        memcpy(buffer, path_string.c_str(), n);
+        cout << buffer << endl;
+        // Preprocess Nodes to Numbers
+        //Stores file in argv[3]: store map in argv[4]
+        //Vertices start from 0
+        translate_input(buffer, 1, output, map);//from translate_from_input.hpp
+        
+        //Remove Duplicate Edges and Self Loops; Create Undirected Graphs
+        // process_to_simple_undirected();
+        q = clock() - q;
+        cout << "Total Time for Preprocessing: " << ((float)q) / CLOCKS_PER_SEC << "\n";
+
+        /***** Preprocessing to Graph (GUI) ***********/
+
+        /******* Read Graph (GUI) and Create Reverse Map*****************/
+        //Obtain the list of edges.
+        q = clock();
+        readin_network(&X, output, nodes);//from Core/basic_io/format/input/level2/input_to_network.hpp
+        //Create Reversemap
+
+        nodes = X.size();
+        create_map(map, &revmap);//from translate_from_input.hpp
+        q = clock() - q;
+        cout << "Total Time for Reading Network: " << ((float)q) / CLOCKS_PER_SEC << "\n";
+        set_opposite_index(&X);
+        k = totalEdges(&X);//getting the total edges in the origional graph, which will be used for the forestfire algorithm
+        for(int i =0; i < 10; i++)
+        {
+            missing.clear();//clearing the array for actual missing edges 
+            sampleMissing.clear();//clearing the array representing the predicted missing edges
+            forest_fire(&S, &X, k, &missing);//forestfire algorithm
+            k = totalEdges(&S);//getting the total edges in the sample graph. This was used to see if there was a relationship between the number of edges and the f1 score of
+
+            missingEdges(&X, &S, &missing);//getting the real missing edges that are in the origional graph but not the sample graph
+            writeSample(&S, "FF");//writing the sample network from the forestfire algorithm
+            missingSample(&S, &sampleMissing);//getting the missing edges in the sample against itself
+            intScores = commonNeighbors(&sampleMissing, &S, "FF-cn.txt", predictedEdges, threshold);//n is a threshold and all scores >=n will be written to the predictedEdges array
+            k = getIndex(intScores, predictedEdges, threshold);//Gets the size up to the threshold for common neighbors. k will be used for katz, AA, and RA.
+            
+            S.clear();
+        }
+
+
+        X.clear();
+        memset(buffer, 0, sizeof(buffer));//resseting the buffer
+    }
 }
