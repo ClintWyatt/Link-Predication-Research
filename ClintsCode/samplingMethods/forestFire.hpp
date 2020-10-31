@@ -13,7 +13,7 @@ void forest_fire(A_Network *S, A_Network *X, int k, vector<Edge> *missing)
   queue<int> nodeQueue;
   vector<bool> visited;//represents nodes that have been burned
 
-  cout << "Running Forest Fire\n";
+  //cout << "Running Forest Fire\n";
 
   //Initialize sample as empty network
   S->clear();

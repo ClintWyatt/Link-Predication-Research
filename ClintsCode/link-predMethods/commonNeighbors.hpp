@@ -16,7 +16,8 @@ vector<int> commonNeighbors(vector<Edge> *missing, A_Network *X, string alg, vec
         score = 0;//resetting the score, which represents the number of common neighbors
         n1 = missing->at(i).node1, n2 = missing->at(i).node2;//getting the missing edges and doing a common neighbor count
         k =0, l =0;//represent the neighbors in n1's and n2's 
-        while(k < X->at(n1).ListW.size() && l < X->at(n2).ListW.size()){//while we are still in both lists for node1 and node2
+        while(k < X->at(n1).ListW.size() && l < X->at(n2).ListW.size())//while we are still in both lists for node1 and node2
+        {
             if(X->at(n1).ListW[k].first < X->at(n2).ListW[l].first){k++;}//if the node in node1's list is less than the node in node2's list
             else if(X->at(n1).ListW[k].first > X->at(n2).ListW[l].first){l++;}//if the node in nodes2's list is less than the node in node1's list
             else{//common neighbor
@@ -32,6 +33,7 @@ vector<int> commonNeighbors(vector<Edge> *missing, A_Network *X, string alg, vec
         scores.push_back(score);//pushing back the score
         if(score >=threshold){predictedEdges.push_back(edgeScore);}//add the desired score to the predictedEdges array
     }
+    //cout <<"number of predicted edges from common neighbors: " << predictedEdges.size() << endl;
     //insertionSort(&edgeScores);//sorting the scores
     //quicksort(predictedEdges, 0, predictedEdges.size()-1);
     insertionSort(&predictedEdges);

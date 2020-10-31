@@ -32,8 +32,10 @@ void threeMetrics(vector<myType> &predictedEdges, vector<Edge> &missing, string 
         }
         edge.clear();
     }
+    //cout << "correctly predicted: " <<ce<<" number of predicted: " <<pe << " number of actual missing: " << oe <<endl; 
     results.close();
-    precision = float(ce) / float(pe);
+    if(pe == 0){precision = 0.0;}
+    else{precision = float(ce) / float(pe);}
     recall = float(ce) / float(oe);
     metrics << "Precision: "<< precision <<endl;
     metrics << "Recall " <<recall <<endl;
@@ -43,7 +45,7 @@ void threeMetrics(vector<myType> &predictedEdges, vector<Edge> &missing, string 
 }
 
 template <class myType>
-vector<float> threeMetrics(vector<myType> &predictedEdges, vector<Edge> &missing)
+vector<float> twoMetrics(vector<myType> &predictedEdges, vector<Edge> &missing)
 {
     int pe = predictedEdges.size(); //perdicted missing edges
     int ce = 0; //correctly perdicted edges
@@ -61,20 +63,20 @@ vector<float> threeMetrics(vector<myType> &predictedEdges, vector<Edge> &missing
             if(edge == predictedEdges[j].second)//if the predicted missing edge is the same as the true missing edge
             {
                 ce++;
-                results << edge << endl;
                 break;
             }
         }
         edge.clear();
     }
-    results.close();
-    precision = float(ce) / float(pe);
+    //cout << "correctly predicted: " <<ce<<" number of predicted: " <<pe << " number of actual missing: " << oe <<endl; 
+    if(pe == 0){precision = 0.0;}
+    else{precision = float(ce) / float(pe);}
     recall = float(ce) / float(oe);
-    f1 = f1Value(precision, recall);
-    vector<float>results;
-    results.push_back(precision);
-    results.push_back(recall);
-    results.push_back(f1);
+    vector<float> results;
+    results.resize(3);
+    results[0] = precision;
+    results[1] = recall;
+    results[2] = f1;
     return results;
 }
 

@@ -38,6 +38,21 @@ void writeBothNetworks(A_Network *X, A_Network *S, string alg)
     sample.close();
 }
 
+void writeOneNetwork(A_Network & X, string file)
+{
+    ofstream origional(file);
+    for(int i =0; i < X.size(); i++)
+    {
+        origional << X.at(i).Row << ": ";
+        for(int j =0; j < X.at(i).ListW.size(); j++)
+        {
+            origional <<X.at(i).ListW[j].first << " ";
+        }
+        origional <<endl;
+    }
+    origional.close();
+}
+
 void writeSample(A_Network *S, string alg)
 {
     ofstream sample("networks/"+alg+"_sample.txt");//writing the the networks directory
