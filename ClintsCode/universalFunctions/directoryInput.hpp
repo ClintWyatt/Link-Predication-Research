@@ -111,11 +111,10 @@ void readManyFiles(char *output, char *map)
         numNodes = S.size();//getting the number of nodes in the graph
         avgEdges/=numLoops;//getting the average number of edges
         //cout << "total cn scores: " << cnScores[0] << " " << cnScores[1] <<endl;
-        outputFile << buffer <<RAScores[0]/numLoops << "\t\t" <<AAScores[0]/numLoops << "\t"<<cnScores[0]/numLoops << "\t" << katzScores[0]/numLoops <<"\n";
-        outputFile << "number of nodes: " << numNodes <<RAScores[1]/numLoops << "\t" <<AAScores[1]/numLoops << "\t"<<cnScores[1]/numLoops << "\t" << katzScores[1]/numLoops <<"\n";
-        outputFile << "average edges: " << avgEdges <<"\t\t\t\t\t\t\t\t\t" <<"\t"<<f1Value(RAScores[0]/numLoops, RAScores[1]/numLoops) << "\t" <<
-        f1Value(AAScores[0]/numLoops, AAScores[1]/numLoops)<<"\t"<< f1Value(cnScores[0]/numLoops, cnScores[1]/numLoops) << 
-        "\t" << f1Value(katzScores[0]/numLoops, katzScores[1]/numLoops) <<"\n";
+        outputFile << buffer <<RAScores[0]/numLoops << " " <<AAScores[0]/numLoops << " "<<cnScores[0]/numLoops << " " << katzScores[0]/numLoops <<"\n";
+        outputFile << "number of nodes: " << numNodes <<RAScores[1]/numLoops << " " <<AAScores[1]/numLoops << " "<<cnScores[1]/numLoops << " " << katzScores[1]/numLoops <<"\n";
+        outputFile << "average edges: " << avgEdges <<" "<<f1Value(RAScores[0]/numLoops, RAScores[1]/numLoops) << " " <<
+        f1Value(AAScores[0]/numLoops, AAScores[1]/numLoops)<<" "<< f1Value(cnScores[0]/numLoops, cnScores[1]/numLoops) << " "<< f1Value(katzScores[0]/numLoops, katzScores[1]/numLoops) <<"\n";
         outputFile << endl;
         X.clear();
         memset(buffer, 0, sizeof(buffer));//resseting the buffer
