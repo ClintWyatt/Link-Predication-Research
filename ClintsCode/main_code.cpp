@@ -30,6 +30,7 @@
 #include "samplingMethods/randomEdge.hpp"
 #include "samplingMethods/randomEdge.hpp"
 #include "samplingMethods/forestFire.hpp"
+#include "universalFunctions/lcs.hpp"
 #include "universalFunctions/directoryInput.hpp"
 #include <filesystem>
 #include <string.h>

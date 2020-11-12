@@ -1,52 +1,25 @@
-../test_networks/other/911terrorists	0.32231	0.289502	0.346405	0.51604
-number of edges: 63										0.158742	0.141997	0.170935	0.256181
-average edges: 63										0.212718	0.190538	0.228913	0.342388
+NAME RA AA CN KATZ Number-of-Nodes Average-Edges lcs
+../test_networks/human/alquedaTerrorists.txt 0.353846 0.338462 0.353846 0.415385 25 25 0.92
+ 0.25 0.23913 0.25 0.293478
+ 0.292994 0.280255 0.292994 0.343949
 
-../test_networks/other/chesapekeFood.txt	0.392576	0.392658	0.396506	0.4555
-number of edges: 40										0.3238	0.323739	0.326851	0.375848
-average edges: 88										0.354886	0.354883	0.358325	0.411858
+../test_networks/human/baseballRoids.txt 0.896173 0.893453 0.898068 0.921718 72 270 274.919
+ 0.653825 0.651841 0.65521 0.672466
+ 0.756053 0.753759 0.757654 0.777607
 
-../test_networks/other/companyInterlocks-1985.txt	1.01243	0.974336	0.892481	1.11644
-number of edges: 15										0.310868	0.307404	0.117782	0.330246
-average edges: 12										0.475678	0.467356	0.2081	0.509717
+../test_networks/human/crack2009.txt 0.289855 0.289855 0.318841 0.434783 51 45 0.215686
+ 0.116279 0.116279 0.127907 0.174419
+ 0.165975 0.165975 0.182573 0.248963
 
-../test_networks/other/employees-1939.txt	0.534945	0.454945	0.28	0.614945
-number of edges: 14										0.654054	0.632432	0.0540541	0.654054
-average edges: 2										0.588534	0.529203	0.0906149	0.633897
+../test_networks/human/crudeMaterialsTrade.txt 0.84127 0.833333 0.84127 0.849206 24 62 8
+ 0.452991 0.448718 0.452991 0.457265
+ 0.588889 0.583333 0.588889 0.594444
 
-../test_networks/other/familyPlanningKorea.txt	0.231859	0.198526	0.0904762	0.274716
-number of edges: 36										0.830454	0.817246	0.0358491	0.847435
-average edges: 6										0.362508	0.319451	0.0513514	0.414925
+../test_networks/human/diplomats.txt 0.869565 0.869565 0.869565 0.855072 24 64 11.8333
+ 0.497925 0.497925 0.497925 0.489627
+ 0.633245 0.633245 0.633245 0.622691
 
-../test_networks/other/fraterntity.txt	1.07995	1.07832	1.07783	1.14724
-number of edges: 58										0.46993	0.469451	0.469256	0.491919
-average edges: 527										0.65489	0.654125	0.653847	0.688585
-
-../test_networks/other/nematodeCElegans.txt	0.0851026	0.0816452	0.0860071	0.121654
-number of edges: 454										0.228887	0.21972	0.231329	0.326792
-average edges: 988										0.124073	0.119052	0.125393	0.177303
-
-../test_networks/other/plant-pollinator.txt	0.298601	0.283329	0.301963	0.38082
-number of edges: 33										0.243953	0.231245	0.246341	0.306131
-average edges: 47										0.268525	0.254651	0.27133	0.339415
-
-../test_networks/other/preschoolDominance.txt	0.655556	0.673737	0.977441	1.00236
-number of edges: 17										0.17242	0.176023	0.184829	0.199179
-average edges: 18										0.273029	0.279122	0.310873	0.332323
-
-../test_networks/other/scotlandCoporate-1904.txt	0.0103725	0.00947505	0.0238316	0.401876
-number of edges: 245										0.00311919	0.00246472	0.00523645	0.0636208
-average edges: 99										0.00479611	0.00391186	0.00858626	0.109851
-
-../test_networks/other/solvenianJournals.txt	0.689398	0.689398	0.689398	0.692941
-number of edges: 124										0.741155	0.741155	0.741155	0.744966
-average edges: 1500										0.71434	0.71434	0.71434	0.718012
-
-../test_networks/other/stolenVehicles	0.229115	0.199948	0.236647	0.301975
-number of edges: 44										0.262964	0.231365	0.270365	0.345004
-average edges: 55										0.244875	0.214512	0.252385	0.322059
-
-../test_networks/other/studentFriendships.txt	0.68101	0.68101	0.68101	0.720688
-number of edges: 32										0.495741	0.495741	0.495741	0.524923
-average edges: 99										0.573791	0.573791	0.573791	0.607422
+../test_networks/human/facebookFriends.txt 0.20423 0.203213 0.204451 0.250074 335 1091 24.3555
+ 0.338811 0.337119 0.339178 0.414796
+ 0.254844 0.253573 0.25512 0.31203
 
