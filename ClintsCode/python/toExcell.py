@@ -1,17 +1,32 @@
 import csv
 
 
-def readFile(data):
+def readFile():
     file = open('../results/bigFile.txt', 'r')
     lines = file.readlines()
+    string =""
     data = []
-    for x in lines:
-        data.append(x)
+    with open('data.csv', 'w') as csvfile:
+        writer = csv.writer(csvfile)
 
-    return data
+        for x in lines:
+            #print("line: ")
+            for y in x:
+                if y != ' ' and y !='\n':
+                    string += y
+                else:
+                    data.append(string)    
+                    string =""
+            
+            #print(string)
+            #data.append(string)
+            print(data)
+            string = ""
+            writer.writerow(data)
+            data.clear()
 
 
-excel = []
-excel = readFile(excel)
 
-print(excel)
+readFile()
+
+#print(excel)
