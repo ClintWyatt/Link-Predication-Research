@@ -9,26 +9,7 @@ float local_clustering_score(A_Network & S)
 {
     int commonNeighbors; //used to represent the total common neighbors between nodes on a row
     float totalScore = 0.0;
-    /*
-    queue <int> discoveredSet;
-    queue <int> frontierQueue;
-    float lcScore = 0.0;
-    vector<bool> visited;
-    vector<int_double> adj;
-    visited.resize(S.size()); 
-    int node;
-    for(int i =0; i < S.size(); i++)
-    {
-        visited.assign(0, S.size());//assigning zeros to all elements in array
-        frontierQueue.push(i);
-        adj = S[i].ListW;
-        while(!frontierQueue.empty())
-        {
-            node = frontierQueue.front();
-        }
 
-    }
-    */
    vector<int_double> adj; //First get a copy of the of the row of the adjacency list. 
    //Second, go through each row of each node in the list and find nodes in the copy row. The common neighbors algorithm will work here.
 

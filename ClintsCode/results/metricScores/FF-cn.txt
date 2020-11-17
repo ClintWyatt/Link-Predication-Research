@@ -188,3 +188,79 @@ Precision: 0.745719
 Recall 0.692369
 F1Value: 0.718054
 
+Precision: 0.666667
+Recall 0.240964
+F1Value: 0.353982
+
+Precision: 0.714286
+Recall 0.384615
+F1Value: 0.5
+
+Precision: 0.809524
+Recall 0.207317
+F1Value: 0.330097
+
+Precision: 0.202686
+Recall 0.482495
+F1Value: 0.285457
+
+Precision: 0.436982
+Recall 0.254466
+F1Value: 0.321636
+
+Precision: 0.411765
+Recall 0.236486
+F1Value: 0.300429
+
+Precision: 0.864996
+Recall 0.751885
+F1Value: 0.804484
+
+Precision: 0.863314
+Recall 0.750718
+F1Value: 0.803089
+
+Precision: 0.272189
+Recall 0.175573
+F1Value: 0.213457
+
+Precision: 0.301471
+Recall 0.155894
+F1Value: 0.205514
+
+Precision: 0.338028
+Recall 0.183908
+F1Value: 0.238213
+
+Precision: 0.280543
+Recall 0.236641
+F1Value: 0.256729
+
+Precision: 0.352459
+Recall 0.159851
+F1Value: 0.219949
+
+Precision: 0.297619
+Recall 0.185185
+F1Value: 0.22831
+
+Precision: 0.243902
+Recall 0.11236
+F1Value: 0.153846
+
+Precision: 0.27027
+Recall 0.155642
+F1Value: 0.197531
+
+Precision: 0.264706
+Recall 0.134831
+F1Value: 0.17866
+
+Precision: 0.377778
+Recall 0.194656
+F1Value: 0.256927
+
+Precision: 0.306569
+Recall 0.159696
+F1Value: 0.21
+

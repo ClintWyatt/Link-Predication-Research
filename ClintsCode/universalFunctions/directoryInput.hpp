@@ -36,7 +36,7 @@ void readManyFiles(char *output, char *map)
     /*other variables */
     map_int_st revmap;
     namespace fs = std::filesystem;
-    string path = "../test_networks/human";//path for the files to be read in. Change this if you want to readin another directory
+    string path = "../test_networks/TINY_100K";//path for the files to be read in. Change this if you want to readin another directory
     ofstream outputFile("results/bigFile.txt");
 
     bzero(buffer, 200);//zeroing out the buffer
@@ -88,10 +88,10 @@ void readManyFiles(char *output, char *map)
             missing.clear();//clearing the array for actual missing edges 
             sampleMissing.clear();//clearing the array representing the predicted missing edges
             k = totalEdges(&X);//getting the total edges in the origional graph, which will be used for the forestfire algorithm
-            forest_fire(&S, &X, k, &missing);//forestfire algorithm
+            forest_fire(S, X, k, missing);//forestfire algorithm
 
             missingEdges(&X, &S, &missing);//getting the real missing edges that are in the origional graph but not the sample graph
-            writeBothNetworks(&X, &S, "FF");//writing the sample network from the forestfire algorithm
+            //writeBothNetworks(&X, &S, "FF");//writing the sample network from the forestfire algorithm
             missingSample(&S, &sampleMissing);//getting the missing edges in the sample against itself
             intScores = commonNeighbors(&sampleMissing, &S, "FF-cn.txt", predictedEdges, threshold);//n is a threshold and all scores >=n will be written to the predictedEdges array
             k = getIndex(intScores, predictedEdges, threshold);//Gets the size up to the threshold for common neighbors. k will be used for katz, AA, and RA.
@@ -116,15 +116,15 @@ void readManyFiles(char *output, char *map)
             RAScores[0]+=tmp[0], RAScores[1]+=tmp[1];//adding the values togeather
             lcs += local_clustering_score(S);
             //sleep(1);
-            //usleep(50000);
+            usleep(50000);
         }
 
         //cout <<"predicted size: " << _predictedEdges.size() << " missing size: " << missing.size() <<endl;
         numNodes = S.size();//getting the number of nodes in the graph
-        avgEdges = total_edges(&X) * 0.25;//getting the average number of edges
+        avgEdges = totalEdges(&X) * 0.25;//getting the average number of edges. Multiplying by 0.25 since the forest fire algorithm will use 25% of the origional graph
         //cout <<"average edges: " << avgEdges << endl;
         outputFile << buffer << " " <<RAScores[0]/numLoops << " " <<AAScores[0]/numLoops << " "<<cnScores[0]/numLoops << " " << katzScores[0]/numLoops << " " <<numNodes<< " " 
-        <<avgEdges << " " << lcs/numLoops << "\n";
+        <<avgEdges << " " << lcs/numLoops << " " <<float(avgEdges/numNodes) <<"\n";
         outputFile << " " <<RAScores[1]/numLoops << " " <<AAScores[1]/numLoops << " "<<cnScores[1]/numLoops << " " << katzScores[1]/numLoops <<"\n";
         outputFile <<" "<<f1Value(RAScores[0]/numLoops, RAScores[1]/numLoops) << " " << f1Value(AAScores[0]/numLoops, AAScores[1]/numLoops)<<" "
         << f1Value(cnScores[0]/numLoops, cnScores[1]/numLoops) << " "<< f1Value(katzScores[0]/numLoops, katzScores[1]/numLoops) <<"\n";

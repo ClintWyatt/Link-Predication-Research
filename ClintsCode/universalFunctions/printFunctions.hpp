@@ -123,19 +123,5 @@ void writeEdges(A_Network & S)
         }
     }
 }
-/*
-template <class myType>
-void writePredictedCn(vector<myType> & predictedMissing, string alg)
-{
 
-    ofstream output("results/predicated/" + alg + ".txt");//directory and the type of algorithm for writing to a file
-    cout << predictedMissing[predictedMissing.size()-1].first <<endl;
-    for(int i = predictedMissing.size() -1; i > -1; i--)
-    {
-        output << predictedMissing[i].first << " " << predictedMissing[i].second << endl;
-
-    }
-    output.close();
-}
-*/
 #endif

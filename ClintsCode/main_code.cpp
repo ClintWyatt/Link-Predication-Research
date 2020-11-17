@@ -21,15 +21,16 @@
 #include "universalFunctions/printFunctions.hpp"
 #include "universalFunctions/sorting.hpp"
 #include "universalFunctions/removeDuplicates.hpp"
+#include "universalFunctions/setupSample.hpp"
 #include "samplingMethods/missingEdges.hpp"
 #include "samplingMethods/xsn.hpp"
+#include "samplingMethods/randomEdge.hpp"
+#include "samplingMethods/forestFire.hpp"
+#include "samplingMethods/randomNode.hpp"
 #include "link-predMethods/commonNeighbors.hpp"
 #include "link-predMethods/AA.hpp"
 #include "link-predMethods/katz.hpp"
 #include "link-predMethods/RA.hpp"
-#include "samplingMethods/randomEdge.hpp"
-#include "samplingMethods/randomEdge.hpp"
-#include "samplingMethods/forestFire.hpp"
 #include "universalFunctions/lcs.hpp"
 #include "universalFunctions/directoryInput.hpp"
 #include <filesystem>
@@ -115,7 +116,7 @@ int main(int argc, char *argv[])
     }
 
     set_opposite_index(&X);
-\
+
     string alg; //represents the algorithm that is used for writing the sample network graphs
     int it = 1;
     int p;                  //percentage of edges removed
@@ -130,7 +131,7 @@ int main(int argc, char *argv[])
     vector<Edge> sampleMissing; //represents the missing edges for the sample network against itself. Represent the predicted edges. 
     vector<Edge> missing; //array representing missing edges that are in the origional network, but not the sample network
     A_Network S;           //sample network. Network_defs.hpp
-    
+    /*
     k = X.size() / 20; //sample network size
     cout <<"running snowball" <<endl;
     removeDuplicateEdges(X);//removing duplicate edges if they exist
@@ -139,14 +140,17 @@ int main(int argc, char *argv[])
     writeBothNetworks(&X, &S, "networks/XSN");//writing networks X and S to output files
     missingSample(&S, &sampleMissing);//getting the edges that are missing in the sample against the sample graph
     writeMissing(&missing, &sampleMissing, "xsn");//writing the actual missing edges and predicted missing edges to text files
-    
+    */
     removeDuplicateEdges(X);
     threshold = 1;
     missing.clear();//clearing the array for actual missing edges 
     sampleMissing.clear();//clearing the array representing the predicted missing edges
     S.clear();
     k = totalEdges(&X);//getting the total edges in the origional graph, which will be used for the forestfire algorithm
-    forest_fire(&S, &X, k, &missing);//forestfire algorithm
+    random_edge(X, S, k/3);
+    writeOneNetwork(S, "networks/REsample.txt");
+    forest_fire(S, X, k, missing);//forestfire algorithm
+    writeBothNetworks(&X, &S, "FF");
     k = totalEdges(&S);//getting the total edges in the sample graph. This was used to see if there was a relationship between the number of edges and the f1 score of
     //all link predication algorithms
     writeSampleGraph(S);//writing the sample graph edges to a text file
@@ -187,5 +191,6 @@ int main(int argc, char *argv[])
     predictedEdges.clear();
     _predictedEdges.clear();
 
+    cout << "Local clustering score is: " << local_clustering_score(S) << endl;
     return 0;   
 }
