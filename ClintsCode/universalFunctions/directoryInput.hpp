@@ -15,7 +15,7 @@ using namespace std;
 void changeDirectory(pid_t pid);
 void runCommunity(pid_t pid);
 void convert(pid_t pid);
-void readManyFiles(char *output, char *map)
+void readManyFiles(char *output, char *map, int options)
 {
     /*vectors*/
     vector<int_string> predictedEdges;//used for the predicted edges for common neighbors
@@ -27,16 +27,16 @@ void readManyFiles(char *output, char *map)
     A_Network X, S;//sample and origional network
 
     /*integers and floats */
-    int nodes, n, k, threshold, avgEdges, numNodes;
+    int nodes, n, k, threshold, numNodes;
     int numLoops = 10;
-    float precisionAvg, recallAvg, f1Avg;  
+    float precisionAvg, recallAvg, f1Avg, avgEdges;  
     float lcs = 0.0; //local clustering score
     char buffer[200];//used to get the name of the file
-    
+    int _2xnodes;
     /*other variables */
     map_int_st revmap;
     namespace fs = std::filesystem;
-    string path = "../test_networks/TINY_100K";//path for the files to be read in. Change this if you want to readin another directory
+    string path = "../test_networks/DYNAMIC_NET";//path for the files to be read in. Change this if you want to readin another directory
     ofstream outputFile("results/bigFile.txt");
 
     bzero(buffer, 200);//zeroing out the buffer
@@ -77,6 +77,7 @@ void readManyFiles(char *output, char *map)
         //Create Reversemap
 
         nodes = X.size();
+        _2xnodes = _2xEdges(X);
         create_map(map, &revmap);//from translate_from_input.hpp
         set_opposite_index(&X);
         removeDuplicateEdges(X);
@@ -88,8 +89,10 @@ void readManyFiles(char *output, char *map)
             missing.clear();//clearing the array for actual missing edges 
             sampleMissing.clear();//clearing the array representing the predicted missing edges
             k = totalEdges(&X);//getting the total edges in the origional graph, which will be used for the forestfire algorithm
-            forest_fire(S, X, k, missing);//forestfire algorithm
+            if(options == 0){forest_fire(S, X, k, missing);}//forestfire algorithm
+            else if(options == 1){random_edge(X, S, _2xnodes * 0.22);}//random edge algorithm
 
+            avgEdges += float(totalEdges(&S));
             missingEdges(&X, &S, &missing);//getting the real missing edges that are in the origional graph but not the sample graph
             //writeBothNetworks(&X, &S, "FF");//writing the sample network from the forestfire algorithm
             missingSample(&S, &sampleMissing);//getting the missing edges in the sample against itself
@@ -116,7 +119,7 @@ void readManyFiles(char *output, char *map)
             RAScores[0]+=tmp[0], RAScores[1]+=tmp[1];//adding the values togeather
             lcs += local_clustering_score(S);
             //sleep(1);
-            usleep(50000);
+            usleep(200000);
         }
 
         //cout <<"predicted size: " << _predictedEdges.size() << " missing size: " << missing.size() <<endl;

@@ -55,9 +55,10 @@ int main(int argc, char *argv[])
         cout << "INPUT ERROR:: At least 2 inputs required. First: filename \n Second: Filetypes: 1:node_node_wt 2:node_wt_node 3:node_node 4:node_node (Only option 1 is active now) \n Third: Name of new file \n Fourth: Name of Map file\n";
         return 0;
     }
-    if(argc == 3)//if we are trying to read all files in a directory
+    if(argc == 4)//if we are trying to read all files in a directory
     {
-        readManyFiles(argv[1], argv[2]);
+        int option = atoi(argv[3]);
+        readManyFiles(argv[1], argv[2], option);
         return 0;
     }
     //Check to see if file opening succeeded
@@ -121,7 +122,7 @@ int main(int argc, char *argv[])
     int it = 1;
     int p;                  //percentage of edges removed
     int k_dist;             //distance between neighbors to be considered for missing edges
-    int k =0; 
+    int k =0, _2xnodes; 
     int threshold;     
     float percentage;//used to get the percentage of bins used the same for common neighbors, AA, katz, and RA
     vector<int_string> predictedEdges;//used for the predicted edges for common neighbors
@@ -147,14 +148,16 @@ int main(int argc, char *argv[])
     sampleMissing.clear();//clearing the array representing the predicted missing edges
     S.clear();
     k = totalEdges(&X);//getting the total edges in the origional graph, which will be used for the forestfire algorithm
-    random_edge(X, S, k/3);
+    _2xnodes = _2xEdges(X);
+    random_edge(X, S, _2xnodes * .22);
     writeOneNetwork(S, "networks/REsample.txt");
-    forest_fire(S, X, k, missing);//forestfire algorithm
-    writeBothNetworks(&X, &S, "FF");
+    //forest_fire(S, X, k, missing);//forestfire algorithm
+    //writeBothNetworks(&X, &S, "FF");
     k = totalEdges(&S);//getting the total edges in the sample graph. This was used to see if there was a relationship between the number of edges and the f1 score of
+
     //all link predication algorithms
     writeSampleGraph(S);//writing the sample graph edges to a text file
-    cout << "Total edges in the sample graph: " << k <<endl;
+    //cout << "Total edges in the sample graph: " << k <<endl;
     missingEdges(&X, &S, &missing);//getting the real missing edges that are in the origional graph but not the sample graph
     writeSample(&S, "FF");//writing the sample network from the forestfire algorithm
     missingSample(&S, &sampleMissing);//getting the missing edges in the sample against itself
