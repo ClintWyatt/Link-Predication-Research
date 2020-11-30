@@ -1,21 +1,93 @@
 
-Precision: 0.935897
-Recall 0.555133
-F1Value: 0.696897
+Precision: 0.681818
+Recall 0.218978
+F1Value: 0.331492
 
-Precision: 0.935897
-Recall 0.555133
-F1Value: 0.696897
+Precision: 0.681818
+Recall 0.218978
+F1Value: 0.331492
 
-Precision: 0.935897
-Recall 0.555133
-F1Value: 0.696897
+Precision: 0.681818
+Recall 0.218978
+F1Value: 0.331492
 
-Precision: 0.935897
-Recall 0.555133
-F1Value: 0.696897
+Precision: 0.681818
+Recall 0.218978
+F1Value: 0.331492
 
-Precision: 0.935897
-Recall 0.555133
-F1Value: 0.696897
+Precision: 0.681818
+Recall 0.218978
+F1Value: 0.331492
+
+Precision: 0.681818
+Recall 0.218978
+F1Value: 0.331492
+
+Precision: 0.681818
+Recall 0.218978
+F1Value: 0.331492
+
+Precision: 0.317235
+Recall 0.547609
+F1Value: 0.401739
+
+Precision: 0
+Recall -nan
+F1Value: -nan
+
+Precision: 0
+Recall -nan
+F1Value: -nan
+
+Precision: 0
+Recall 0
+F1Value: -nan
+
+Precision: 0
+Recall 0
+F1Value: -nan
+
+Precision: 0
+Recall 0
+F1Value: -nan
+
+Precision: 0
+Recall 0
+F1Value: -nan
+
+Precision: 0
+Recall 0
+F1Value: -nan
+
+Precision: 0
+Recall 0
+F1Value: -nan
+
+Precision: 0
+Recall 0
+F1Value: -nan
+
+Precision: 0
+Recall 0
+F1Value: -nan
+
+Precision: 0
+Recall 0
+F1Value: -nan
+
+Precision: 0
+Recall 0
+F1Value: -nan
+
+Precision: 0
+Recall 0
+F1Value: -nan
+
+Precision: 0
+Recall 0
+F1Value: -nan
+
+Precision: 0
+Recall 0
+F1Value: -nan
 

@@ -132,18 +132,24 @@ int main(int argc, char *argv[])
     vector<Edge> sampleMissing; //represents the missing edges for the sample network against itself. Represent the predicted edges. 
     vector<Edge> missing; //array representing missing edges that are in the origional network, but not the sample network
     A_Network S;           //sample network. Network_defs.hpp
-    /*
-    k = X.size() / 20; //sample network size
+    
+    removeDuplicateEdges(X);
+    
+    missing.clear();//clearing the array for actual missing edges 
+    sampleMissing.clear();//clearing the array representing the predicted missing edges
+    S.clear();
+    k = (X.size() / 100) +2; //sample network size
     cout <<"running snowball" <<endl;
-    removeDuplicateEdges(X);//removing duplicate edges if they exist
-    snowball(&X, &S, k, &missing);//snowball algorithm
+    snowball(&X, &S, k);//snowball algorithm
     missingEdges(&X, &S, &missing);//getting the edges that are in the origional network, but not the sample network
     writeBothNetworks(&X, &S, "networks/XSN");//writing networks X and S to output files
     missingSample(&S, &sampleMissing);//getting the edges that are missing in the sample against the sample graph
     writeMissing(&missing, &sampleMissing, "xsn");//writing the actual missing edges and predicted missing edges to text files
-    */
-    removeDuplicateEdges(X);
+    
+    //removeDuplicateEdges(X);
+    
     threshold = 1;
+    /*
     missing.clear();//clearing the array for actual missing edges 
     sampleMissing.clear();//clearing the array representing the predicted missing edges
     S.clear();
@@ -154,24 +160,24 @@ int main(int argc, char *argv[])
     //forest_fire(S, X, k, missing);//forestfire algorithm
     //writeBothNetworks(&X, &S, "FF");
     k = totalEdges(&S);//getting the total edges in the sample graph. This was used to see if there was a relationship between the number of edges and the f1 score of
-
+    
     //all link predication algorithms
     writeSampleGraph(S);//writing the sample graph edges to a text file
     //cout << "Total edges in the sample graph: " << k <<endl;
     missingEdges(&X, &S, &missing);//getting the real missing edges that are in the origional graph but not the sample graph
     writeSample(&S, "FF");//writing the sample network from the forestfire algorithm
     missingSample(&S, &sampleMissing);//getting the missing edges in the sample against itself
-
+    */
     /*computing the metrics for CN, RA, AA, and katz */
-    writeMissing(&missing, &sampleMissing, "FF");//writing the missing edges and smaple missing edges to text files
-
+    //writeMissing(&missing, &sampleMissing, "FF");//writing the missing edges and smaple missing edges to text files
+    
     cout << "Running metrics for common neighbors"<<endl; 
     intScores = commonNeighbors(&sampleMissing, &S, "FF-cn.txt", predictedEdges, threshold);//n is a threshold and all scores >=n will be written to the predictedEdges array
     k = getIndex(intScores, predictedEdges, threshold);//Gets the size up to the threshold for common neighbors. k will be used for katz, AA, and RA.
     writePredicted(predictedEdges, "FF-CN");  
     threeMetrics(predictedEdges, missing, "FF-cn");//calculating the recall, percision, and f1 value
     predictedEdges.clear();//clearing the predictedEdges array to be used for AA
-    
+    quicksort(predictedEdges, 0, predictedEdges.size());
     cout << "Running metrics for AA"<< endl;
     AA(&sampleMissing, _predictedEdges, &S);
     setPredictedEdges(_predictedEdges, k);

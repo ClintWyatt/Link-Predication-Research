@@ -4,7 +4,9 @@
 #include "missingEdges.hpp"
 using namespace std;
 
-void snowball(A_Network *X, A_Network *S, int size, vector<Edge> *missing)
+//the issue seen so far is whenever the green nodes are added to the sample graph, 
+
+void snowball(A_Network *X, A_Network *S, int size)
 {
     /*data structures */
 
@@ -112,12 +114,13 @@ void snowball(A_Network *X, A_Network *S, int size, vector<Edge> *missing)
     {
         if((red[i] == 1 /*|| red[i] == 2) && (marked[i] == 0)*/))//if the nodes are red/white and not green. 
             green.push_back(i);
+        /*    
         else if(red[i] == 0 && marked[i] == 0)
             missingNodes.push_back(i);//putting the node that is not in the sample into another array
-        
+        */
     }
     
-    sort(&green);
+    sort(&green);//sorting the green nodes 
     /*
     int current = red.size();
     //now getting the unknown nodes that are 
@@ -156,6 +159,7 @@ void snowball(A_Network *X, A_Network *S, int size, vector<Edge> *missing)
         if(i == green[j])//if the node in the snowball array is the same as the row in the x network
         {        
             j++;
+            //similar logic to the common neighbors is used to fill the sample graph with all the green nodes
             while(listw_index < X->at(i).ListW.size() && greenIndex < green.size())//comparing the nodes from the snowball algorithm with a row of the x network
             {
                 if(green[greenIndex] < X->at(i).ListW[listw_index].first){greenIndex++;}
@@ -170,8 +174,7 @@ void snowball(A_Network *X, A_Network *S, int size, vector<Edge> *missing)
                     }
                     greenIndex++;
                     listw_index++;
-                }
-                
+                }          
             }
         }
    }

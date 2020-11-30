@@ -18,6 +18,22 @@ void threeMetrics(vector<myType> &predictedEdges, vector<Edge> &missing, string 
     float f1;
     string edge;//used to represent the edge in for the real missing edges
     //cout << predictedEdges.size() << endl;
+
+    //
+    /*
+    cout <<"predicted missing edges: \n";
+    for(int i =0; i < predictedEdges.size(); i++)
+    {
+        cout <<  predictedEdges[i].second << endl;
+    }
+    cout <<endl;
+    cout <<"actual missing edges \n";
+    for(int i =0; i < missing.size(); i++)
+    {
+        cout << missing[i].node1 << " "<< missing[i].node2 << endl;
+    }
+    */
+
     for(int i =0; i < missing.size(); i++)
     {
         edge += to_string(missing[i].node1) + " " + to_string(missing[i].node2);//represents the true missing edge
@@ -32,7 +48,7 @@ void threeMetrics(vector<myType> &predictedEdges, vector<Edge> &missing, string 
         }
         edge.clear();
     }
-    //cout << "correctly predicted: " <<ce<<" number of predicted: " <<pe << " number of actual missing: " << oe <<endl; 
+    cout << "correctly predicted: " <<ce<<" number of predicted: " <<pe << " number of actual missing: " << oe <<endl; 
     results.close();
     if(pe == 0){precision = 0.0;}
     else{precision = float(ce) / float(pe);}

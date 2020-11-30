@@ -4,69 +4,61 @@
 using namespace std;
 void forest_fire(A_Network &S, A_Network &X, int k, vector<Edge> &missing)
 {
-  //Initialize random seed
+  //Initialize randNumm seed
   srand(time(NULL));
 
   int pf = 75, pb;
   int seed_node; 
-  int rando, S_edges = 0;
-  queue<int> nodeQueue;
-  vector<bool> visited;//represents nodes that have been burned
-
-  //cout << "Running Forest Fire\n";
+  int randNum, sampleEdges = 0;
+  queue<int> burnedQueue;//represents the burned nodes in the origionla graph
+  vector<bool> burned;//represents nodes that have been burned
 
   //Initialize sample as empty network
   S.clear();
   S.resize(X.size());
 
-  visited.clear();
-  visited.resize(X.size());
+  burned.clear();
+  burned.resize(X.size());
 
-  for(int i =0; i < X.size(); i++){visited[i] = false;}
+  for(int i =0; i < X.size(); i++){burned[i] = false;}
 
   setUpSample(S, X.size());
-  //Pick random seed node
+  //Pick randNumm seed node
   seed_node = rand() % S.size();
   
-  nodeQueue.push(seed_node);
-  visited.at(seed_node) = true;
+  burnedQueue.push(seed_node);
+  burned.at(seed_node) = true;
 
-  //s_edges will likely never get to the number of edges (k) 
-  while(S_edges < k)
+  //sampleEdges will likely never get to the number of edges (k) 
+  while(sampleEdges < k)
   {
-    nodeQueue.pop();
+    burnedQueue.pop();//remove the front of the burnedQueue
     
-    //Go through each edge on the node
-    for(int i = 0; i < X.at(seed_node).ListW.size(); i++)
+    //Go through each neighbor of the seed_node. 
+    for(int i = 0; i < X.at(seed_node).ListW.size(); i++)//going through all the neighbors of the burned node
     {
-      //Burn node: Add node to queue if link was burned
-      rando = rand() % 100 + 1; //Random number
-      if (rando <= pf)//Burn link with probability of pf
+      randNum = rand() % 100 + 1; //generating a randNumm number
+      if (randNum <= pf)//If randNum is less than pf, then try to burn the node that is a neighbor of the seed_node
       { 
-        if(visited.at(X.at(seed_node).ListW[i].first) == false)//if node is not burned
+        if(burned.at(X.at(seed_node).ListW[i].first) == false)//if node is not burned
         {
-          nodeQueue.push(X.at(seed_node).ListW[i].first);//add burned node to the queue
-          visited.at(X.at(seed_node).ListW[i].first) = true;//node is now burned
+          burnedQueue.push(X.at(seed_node).ListW[i].first);//add burned node to the queue
+          burned.at(X.at(seed_node).ListW[i].first) = true;//node is now burned
         }      
       }
-      else//Add non-burned edge to sample
+      else//Add non-burned edge to the sample graph
       {
-        S.at(seed_node).ListW.push_back(X.at(seed_node).ListW[i]);
+        S.at(seed_node).ListW.push_back(X.at(seed_node).ListW[i]);//add the seed node's unburned neighbor to the sample graph
         S.at(seed_node).Ops.push_back(0);
-        S_edges++;
+        sampleEdges++;//increment the number of sample edges
       }
     }
 
-    if(nodeQueue.empty())//if the queue is empty, end this algorithm
+    if(burnedQueue.empty())//if the queue is empty, end this algorithm
     {
       break;
     }
-    seed_node = nodeQueue.front();//getting the front node of the burned nodes
-  }
-
-  for(int i =0; i < S.size(); i++)
-  {
-    quicksort(S[i].ListW, 0, S[i].ListW.size() -1);
+    seed_node = burnedQueue.front();//getting the next burned node
   }
 }
 

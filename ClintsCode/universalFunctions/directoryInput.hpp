@@ -7,14 +7,10 @@
 #include <string.h>
 #include <string>
 #include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+
 
 using namespace std;
 
-void changeDirectory(pid_t pid);
-void runCommunity(pid_t pid);
-void convert(pid_t pid);
 void readManyFiles(char *output, char *map, int options)
 {
     /*vectors*/
@@ -89,8 +85,11 @@ void readManyFiles(char *output, char *map, int options)
             missing.clear();//clearing the array for actual missing edges 
             sampleMissing.clear();//clearing the array representing the predicted missing edges
             k = totalEdges(&X);//getting the total edges in the origional graph, which will be used for the forestfire algorithm
+
+            //choosing which sampling algorithm to use
             if(options == 0){forest_fire(S, X, k, missing);}//forestfire algorithm
             else if(options == 1){random_edge(X, S, _2xnodes * 0.22);}//random edge algorithm
+            else if(options == 2){snowball(&X, &S, k/25);}
 
             avgEdges += float(totalEdges(&S));
             missingEdges(&X, &S, &missing);//getting the real missing edges that are in the origional graph but not the sample graph
@@ -139,47 +138,4 @@ void readManyFiles(char *output, char *map, int options)
     outputFile.close();
 }
 
-
-void changeDirectory(pid_t pid)
-{
-    int status;
-    if((pid == fork()) == -1){cout << "fork error\n";}
-    else if(pid == 0)//child process
-    {
-        execlp("cd", "../../..");//going to the directory with the community files
-    }
-    else
-    {
-        wait(&status);//wait for child to finish
-    }
-}
-
-void runCommunity(pid_t pid)
-{
-    int status;
-    if((pid == fork()) == -1){cout << "fork error\n";}
-    else if(pid == 0)//child process
-    {
-        execlp("./community", "graph.bin", "-l", "-1", "-v", ">", "graph.tree");//going to the directory with the community files
-    }
-    else
-    {
-        wait(&status);//wait for child to finish
-    }
-
-}
-
-void convert(pid_t pid)
-{
-    int status;
-    if((pid == fork()) == -1){cout << "fork error\n";}
-    else if(pid == 0)//child process
-    {
-        execlp("./convert", "-i", "graph.txt", "-o", "graph.bin");//going to the directory with the community files
-    }
-    else
-    {
-        wait(&status);//wait for child to finish
-    }
-}
 #endif

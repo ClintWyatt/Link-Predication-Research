@@ -1,9 +1,5 @@
 NAME RA AA CN KATZ Number-of-Nodes Average-Edges lcs
-../test_networks/DYNAMIC_NET/aves-weaver-social.edges 0.406819 0.351932 0.432189 0.578567 446 545 0.817713 1.22197
- 0.189909 0.164401 0.201731 0.270069
- 0.25894 0.224111 0.275069 0.368245
-
-../test_networks/DYNAMIC_NET/aves-wildbird-network.edges 0.0839793 0.0839793 0.0839793 0.0839427 203 1822 1.78079e+06 8.97537
- 0.309378 0.309378 0.309378 0.309243
- 0.132101 0.132101 0.132101 0.132043
+../test_networks/DYNAMIC_NET/aves-weaver-social.edges 0 0 0 0 446 545 3754.81 1.22197
+ -nan -nan -nan -nan
+ -nan -nan -nan -nan
 
