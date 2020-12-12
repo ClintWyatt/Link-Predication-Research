@@ -92,9 +92,8 @@ int pathLength3(vector<int> *node1Neighbors, vector<int> *node2Neighbors, Edge m
             //cout << i << endl;
             for(int j =0; j < X->at(i).ListW.size(); j++)//Going through list for the neighbor(at index i) of node1
             {   
-                if(node2Neighbors->at(X->at(i).ListW[j].first) == 1 && X->at(i).ListW[j].first != missing.node2)//node2Neighbors->at(X->at(i).ListW[j].first)
-                //refers to a neighbor of node2 that has an edge to the neighbor(at index i) of node1
-                {
+                if(node2Neighbors->at(X->at(i).ListW[j].first) == 1 && X->at(i).ListW[j].first != missing.node2)//if a neighbor of node2 has an edge to the neighbor(at index i) of node1
+                {//node2Neighbors->at(X->at(i).ListW[j].first) 
                     count++;
                     //adding the locations of the nodes with a common neighbor for the copy arrays, which will help in getting neighbors farther out
                     node1Copy.push_back(i);
@@ -103,16 +102,13 @@ int pathLength3(vector<int> *node1Neighbors, vector<int> *node2Neighbors, Edge m
             }
         }  
     }
-    //case2, if node1 and node2 have a edge between them, get all the neighbors of node2 (except for node1) and add them to the score. 
-    //For example, if A and B are connected and B has a neighbor C, then A->B->C->B is a path length of 3
-    //if(path1 == true){count += X->at(missing.node2).ListW.size()-1;}//add the total number of neighbors to node2 minus node1 to the number of paths that are length 3
-
+   
     node1Neighbors->clear();//clearing all data in the bit vector
     node1Neighbors->resize(X->size(), 0);//resetting the node1Neighbors array
     int index;//used to get the value of the node on a path of 3 between node1 and node2
 
     /*
-      Need to get the adjacent nodes of the neighbors from node1. Then all possible paths of 4 will be found.
+      Need to get the adjacent nodes of the of node1's neighbors. Then all possible paths of 4 will be found.
       Duplicate nodes in a path may be possible since katz consideres all possible paths
     */
     for(int i =0; i < node1Copy.size(); i++)//going through the nodes adjacent to node1 that produced a path of 3 to node 2

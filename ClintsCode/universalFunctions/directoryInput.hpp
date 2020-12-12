@@ -11,7 +11,7 @@
 
 using namespace std;
 
-void readManyFiles(char *output, char *map, int options)
+void readManyFiles(char *output, char *map, char *directory, int options)
 {
     /*vectors*/
     vector<int_string> predictedEdges;//used for the predicted edges for common neighbors
@@ -32,7 +32,7 @@ void readManyFiles(char *output, char *map, int options)
     /*other variables */
     map_int_st revmap;
     namespace fs = std::filesystem;
-    string path = "../test_networks/DYNAMIC_NET";//path for the files to be read in. Change this if you want to readin another directory
+    string path(directory); //= "../test_networks/animal";//path for the files to be read in. Change this if you want to readin another directory
     ofstream outputFile("results/bigFile.txt");
 
     bzero(buffer, 200);//zeroing out the buffer
@@ -73,7 +73,7 @@ void readManyFiles(char *output, char *map, int options)
         //Create Reversemap
 
         nodes = X.size();
-        _2xnodes = _2xEdges(X);
+        _2xnodes = _2xEdges(X) * 0.25;
         create_map(map, &revmap);//from translate_from_input.hpp
         set_opposite_index(&X);
         removeDuplicateEdges(X);
@@ -87,10 +87,10 @@ void readManyFiles(char *output, char *map, int options)
             k = totalEdges(&X);//getting the total edges in the origional graph, which will be used for the forestfire algorithm
 
             //choosing which sampling algorithm to use
-            if(options == 0){forest_fire(S, X, k, missing);}//forestfire algorithm
-            else if(options == 1){random_edge(X, S, _2xnodes * 0.22);}//random edge algorithm
+            if(options == 0){forest_fire(S, X);}//forestfire algorithm
+            else if(options == 1){random_edge(X, S, _2xnodes);}//random edge algorithm
             else if(options == 2){snowball(&X, &S, k/25);}
-
+            //writeOneNetwork(S, "networks/RESample.txt");
             avgEdges += float(totalEdges(&S));
             missingEdges(&X, &S, &missing);//getting the real missing edges that are in the origional graph but not the sample graph
             //writeBothNetworks(&X, &S, "FF");//writing the sample network from the forestfire algorithm
@@ -118,7 +118,7 @@ void readManyFiles(char *output, char *map, int options)
             RAScores[0]+=tmp[0], RAScores[1]+=tmp[1];//adding the values togeather
             lcs += local_clustering_score(S);
             //sleep(1);
-            usleep(200000);
+            usleep(100000);
         }
 
         //cout <<"predicted size: " << _predictedEdges.size() << " missing size: " << missing.size() <<endl;

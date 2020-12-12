@@ -55,10 +55,10 @@ int main(int argc, char *argv[])
         cout << "INPUT ERROR:: At least 2 inputs required. First: filename \n Second: Filetypes: 1:node_node_wt 2:node_wt_node 3:node_node 4:node_node (Only option 1 is active now) \n Third: Name of new file \n Fourth: Name of Map file\n";
         return 0;
     }
-    if(argc == 4)//if we are trying to read all files in a directory
+    if(argc == 6)//if we are trying to read all files in a directory
     {
-        int option = atoi(argv[3]);
-        readManyFiles(argv[1], argv[2], option);
+        int option = atoi(argv[4]);
+        readManyFiles(argv[1], argv[2], argv[3], option);
         return 0;
     }
     //Check to see if file opening succeeded
@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
     A_Network S;           //sample network. Network_defs.hpp
     
     removeDuplicateEdges(X);
-    
+    /*
     missing.clear();//clearing the array for actual missing edges 
     sampleMissing.clear();//clearing the array representing the predicted missing edges
     S.clear();
@@ -145,29 +145,31 @@ int main(int argc, char *argv[])
     writeBothNetworks(&X, &S, "networks/XSN");//writing networks X and S to output files
     missingSample(&S, &sampleMissing);//getting the edges that are missing in the sample against the sample graph
     writeMissing(&missing, &sampleMissing, "xsn");//writing the actual missing edges and predicted missing edges to text files
-    
+    */
     //removeDuplicateEdges(X);
     
     threshold = 1;
-    /*
+    
     missing.clear();//clearing the array for actual missing edges 
     sampleMissing.clear();//clearing the array representing the predicted missing edges
     S.clear();
     k = totalEdges(&X);//getting the total edges in the origional graph, which will be used for the forestfire algorithm
     _2xnodes = _2xEdges(X);
     random_edge(X, S, _2xnodes * .22);
-    writeOneNetwork(S, "networks/REsample.txt");
-    //forest_fire(S, X, k, missing);//forestfire algorithm
+    //writeOneNetwork(S, "networks/REsample.txt");
+    //writeOneNetwork(X, "networks/origional.txt");
+    forest_fire(S, X);//forestfire algorithm
     //writeBothNetworks(&X, &S, "FF");
+    writeOneNetwork(S, "networks/FF_sample.txt");
     k = totalEdges(&S);//getting the total edges in the sample graph. This was used to see if there was a relationship between the number of edges and the f1 score of
     
     //all link predication algorithms
     writeSampleGraph(S);//writing the sample graph edges to a text file
     //cout << "Total edges in the sample graph: " << k <<endl;
     missingEdges(&X, &S, &missing);//getting the real missing edges that are in the origional graph but not the sample graph
-    writeSample(&S, "FF");//writing the sample network from the forestfire algorithm
+    //writeSample(&S, "FF");//writing the sample network from the forestfire algorithm
     missingSample(&S, &sampleMissing);//getting the missing edges in the sample against itself
-    */
+    
     /*computing the metrics for CN, RA, AA, and katz */
     //writeMissing(&missing, &sampleMissing, "FF");//writing the missing edges and smaple missing edges to text files
     

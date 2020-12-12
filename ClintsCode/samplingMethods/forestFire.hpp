@@ -2,7 +2,7 @@
 #define FORESTFIRE_HPP
 
 using namespace std;
-void forest_fire(A_Network &S, A_Network &X, int k, vector<Edge> &missing)
+void forest_fire(A_Network &S, A_Network &X)
 {
   //Initialize randNumm seed
   srand(time(NULL));
@@ -30,15 +30,15 @@ void forest_fire(A_Network &S, A_Network &X, int k, vector<Edge> &missing)
   burned.at(seed_node) = true;
 
   //sampleEdges will likely never get to the number of edges (k) 
-  while(sampleEdges < k)
-  {
+  while(!burnedQueue.empty()){
+  //do{
     burnedQueue.pop();//remove the front of the burnedQueue
     
     //Go through each neighbor of the seed_node. 
     for(int i = 0; i < X.at(seed_node).ListW.size(); i++)//going through all the neighbors of the burned node
     {
       randNum = rand() % 100 + 1; //generating a randNumm number
-      if (randNum <= pf)//If randNum is less than pf, then try to burn the node that is a neighbor of the seed_node
+      if (randNum <= pf)//If randNum is less than pf, then try to burn an edge of the seed_node
       { 
         if(burned.at(X.at(seed_node).ListW[i].first) == false)//if node is not burned
         {
@@ -59,7 +59,7 @@ void forest_fire(A_Network &S, A_Network &X, int k, vector<Edge> &missing)
       break;
     }
     seed_node = burnedQueue.front();//getting the next burned node
-  }
+  }//while(!burnedQueue.empty());
 }
 
 #endif

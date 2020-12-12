@@ -75,3 +75,35 @@ Precision: 0
 Recall 0
 F1Value: -nan
 
+Precision: 0.343611
+Recall 0.593139
+F1Value: 0.435141
+
+Precision: 0.910256
+Recall 0.539924
+F1Value: 0.677804
+
+Precision: 0.910256
+Recall 0.539924
+F1Value: 0.677804
+
+Precision: 0.910256
+Recall 0.539924
+F1Value: 0.677804
+
+Precision: 0.910256
+Recall 0.539924
+F1Value: 0.677804
+
+Precision: 0.88169
+Recall 0.617357
+F1Value: 0.726218
+
+Precision: 0.889503
+Recall 0.636364
+F1Value: 0.741935
+
+Precision: 0.900553
+Recall 0.639216
+F1Value: 0.747706
+

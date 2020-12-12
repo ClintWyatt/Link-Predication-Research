@@ -1,5 +1,1 @@
 NAME RA AA CN KATZ Number-of-Nodes Average-Edges lcs
-../test_networks/DYNAMIC_NET/aves-weaver-social.edges 0 0 0 0 446 545 3754.81 1.22197
- -nan -nan -nan -nan
- -nan -nan -nan -nan
-
